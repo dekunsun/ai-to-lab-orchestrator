@@ -1,0 +1,15 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Scratch / temporary files
+scratch.py
+
+# Runtime-generated data
+db/*.sqlite
+
+# OS files
+.DS_Store

@@ -1,0 +1,25 @@
+# CdTe experiment workflow: defines the parameter space and the ordered steps.
+workflow_id: cdte_v1
+project: cdte_solar_cell
+
+# The parameters the optimizer is allowed to vary, with their bounds.
+parameters:
+  cdte_thickness_nm:
+    min: 800
+    max: 4000
+  substrate_temp_c:
+    min: 250
+    max: 550
+  cdcl2_treatment_temp_c:
+    min: 330
+    max: 470
+  cdcl2_treatment_time_min:
+    min: 5
+    max: 60
+
+# The ordered list of steps. Each step runs one device, in this order.
+steps:
+  - name: characterize_structure
+    device: xrd_simulator
+  - name: measure_performance
+    device: solar_cell_jv_simulator
