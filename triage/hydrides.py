@@ -11,7 +11,8 @@ import pandas as pd
 
 def load_hydrides(path="configs/data/hydrides.csv"):
     """Load the published hydride data into a pandas DataFrame."""
-    df = pd.read_csv(path)
+    # comment="#" tells pandas to skip the source-attribution lines at the top
+    df = pd.read_csv(path, comment="#")
     return df
 
 def add_scores(df):
