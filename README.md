@@ -41,7 +41,7 @@ a fixed experiment budget, reporting **median + IQR across seeds**, since single
 runs vary widely. BO reaches a median best of ~0.78 (near the surrogate's
 optimum) vs ~0.66 for random, with a tighter spread — higher *and* more reliable.
 
-See `artifacts/benchmark_convergence.png`.
+![Benchmark: BO vs random convergence, median ± IQR over 30 seeds](artifacts/benchmark_convergence.png)
 
 ## Use case 2 — Hydride candidate triage
 
