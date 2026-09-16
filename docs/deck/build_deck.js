@@ -3,6 +3,7 @@
  * system itself produced, so the deck cannot drift from the code:
  *   artifacts/benchmark_results/cdte_benchmark*.json
  *   artifacts/triage_results/hydride_triage.json
+ *   artifacts/evidence_results/evidence_loop.json
  *
  *   node docs/deck/build_deck.js
  */
@@ -18,6 +19,7 @@ const bench = read("artifacts/benchmark_results/cdte_benchmark.json");
 const benchPerf = read("artifacts/benchmark_results/cdte_benchmark_cdte_performance_first.json");
 const benchManu = read("artifacts/benchmark_results/cdte_benchmark_cdte_manufacturability_first.json");
 const triage = read("artifacts/triage_results/hydride_triage.json");
+const eloop = read("artifacts/evidence_results/evidence_loop.json");
 
 // ---------------------------------------------------------------- palette
 const INK = "18222B";      // graphite — dominant on dark slides
@@ -122,7 +124,7 @@ function lightSlide() {
 
   const facts = [
     ["2", "use cases, both defensible"],
-    ["47", "tests, including the governance layer"],
+    ["65", "tests, including the governance and evidence layers"],
     ["30 x 30", "seed benchmark, reproducible from one script"],
   ];
   facts.forEach(([v, l], i) => {
@@ -555,15 +557,91 @@ function lightSlide() {
     { x: L + 0.4, y: 5.52, w: W - 0.8, h: 0.65, isTextBox: true, margin: 0,
       fontFace: B, fontSize: 12, color: "C3D0DA", valign: "top", lineSpacing: 16 });
 
-  body(s, "Plans stop at awaiting_device_implementation. There are no hydride synthesis devices here and none will be fabricated — simulating a hydrogenation anneal would be exactly the fake physics this project refuses. The seam sits where a real lab's seam sits.",
+  body(s, "Plans stop at awaiting_device_implementation — no hydride synthesis is simulated, because there is no honest way to. That is the forward path. What comes back across the same seam is the next slide.",
     { y: 6.45, size: 11.5, color: MUTED });
   s.addNotes("If someone asks what the hardest architectural decision was: making triage an entry point into the existing loop rather than a parallel module. It is the difference between a system and a portfolio of scripts.");
+}
+
+// ================================================================ 12. EVIDENCE LOOP
+{
+  const s = lightSlide();
+  chip(s, "11  ·  CLOSING THE LOOP", { fill: SIGNAL });
+  title(s, "A measurement changes the ranking that proposed it");
+  kicker(s, "Evidence is received, never manufactured. There are no hydride devices, so records enter from\noutside — an instrument, a collaborator, a paper. A record with no named recorder or stated source\nis rejected at load: a measurement nobody will sign for cannot overturn a prediction.", { y: 1.72 });
+
+  const cal = eloop.calibration;
+  const inc = eloop.records.find((r) => r.verdict === "inconclusive");
+  // the module's identifier is right for logs and data; a slide wants the name
+  const calText = cal.description.replace(/allen_dynes/g, "Allen\u2013Dynes");
+
+  // --- the two judgments that do the work ---
+  card(s, { x: L, y: 3.15, w: 6.0, h: 1.62, fill: "FDEEE6", border: "F0C4AE" });
+  s.addText("A null result is meaningless without its floor", {
+    x: L + 0.32, y: 3.34, w: 5.4, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: H, fontSize: 15, bold: true, color: SIGNAL, valign: "middle" });
+  s.addText(inc
+    ? `${inc.formula}: no transition seen — but the rig reached only ${inc.measurement_floor_k} K and the prediction is ${inc.predicted_tc_k} K. The run could not have observed what it was testing, so it refutes nothing. Marked inconclusive, excluded from the calibration, and its hypothesis stays open.`
+    : "An experiment that could not have seen the effect is not evidence the effect is absent.",
+    { x: L + 0.32, y: 3.7, w: 5.4, h: 0.95, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 10.5, color: INK, valign: "top", lineSpacing: 14.5 });
+
+  card(s, { x: L, y: 4.92, w: 6.0, h: 1.48 });
+  s.addText("Evidence about one compound calibrates the method", {
+    x: L + 0.32, y: 5.11, w: 5.4, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: H, fontSize: 15, bold: true, color: STEEL, valign: "middle" });
+  s.addText(`21 of 22 candidates rest on Allen–Dynes alone. ${calText} A calibration lowers confidence and never rewrites a prediction — a "corrected" Tc would invent a number nobody computed.`,
+    { x: L + 0.32, y: 5.47, w: 5.4, h: 0.82, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 10.5, color: INK, valign: "top", lineSpacing: 14.5 });
+
+  // --- the cohort, before and after ---
+  card(s, { x: 7.1, y: 3.15, w: 5.6, h: 3.25 });
+  s.addText("The cohort re-ranks", { x: 7.42, y: 3.36, w: 5.0, h: 0.32, isTextBox: true, margin: 0,
+    fontFace: H, fontSize: 15, bold: true, color: INK, valign: "middle" });
+
+  const hx = [7.42, 9.58, 10.42, 11.3];
+  const hw = [2.1, 0.8, 0.8, 1.4];
+  ["Candidate", "was", "now", "Tc source"].forEach((h2, i) =>
+    s.addText(h2, { x: hx[i], y: 3.76, w: hw[i], h: 0.26, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 9.5, bold: true, color: MUTED, valign: "middle",
+      align: i === 0 || i === 3 ? "left" : "center" }));
+
+  eloop.ranking_after.slice(0, 6).forEach((r, i) => {
+    const y = 4.06 + i * 0.33;
+    const moved = r.move !== 0;
+    const col = moved ? (r.move > 0 ? PASS : SIGNAL) : MUTED;
+    s.addText(r.formula, { x: hx[0], y, w: hw[0], h: 0.3, isTextBox: true, margin: 0,
+      fontFace: M, fontSize: 10.5, color: INK, valign: "middle" });
+    s.addText(String(r.was), { x: hx[1], y, w: hw[1], h: 0.3, isTextBox: true, margin: 0,
+      fontFace: M, fontSize: 10.5, color: MUTED, align: "center", valign: "middle" });
+    s.addText(String(r.rank) + (moved ? ` (${r.move > 0 ? "+" : ""}${r.move})` : ""), {
+      x: hx[2], y, w: hw[2], h: 0.3, isTextBox: true, margin: 0,
+      fontFace: M, fontSize: 10.5, bold: moved, color: col, align: "center", valign: "middle" });
+    s.addText(r.tc_source === "allen_dynes" ? "Allen–Dynes" : r.tc_source, {
+      x: hx[3], y, w: hw[3], h: 0.3, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 10, bold: r.tc_source === "measured",
+      color: r.tc_source === "measured" ? STEEL : MUTED, valign: "middle" });
+  });
+  s.addText("A measured Tc supersedes every calculation, and the hypothesis moves from proposed to supported or contradicted.",
+    { x: 7.42, y: 6.04, w: 5.0, h: 0.3, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 10, color: MUTED, italic: true, valign: "top", lineSpacing: 13 });
+
+  // --- the behaviour I did not design and only saw by running it ---
+  card(s, { x: L, y: 6.56, w: W, h: 0.76, fill: INK, border: INK });
+  s.addText([
+    { text: "Measuring the leader low moved candidates nobody tested. ",
+      options: { bold: true, color: WHITE } },
+    { text: "Tc is normalized against the best in the cohort, so when the leader falls every untested compound becomes relatively more attractive — partly offset by the confidence penalty the same evidence applied to the method. A ranking is a statement about a set, not about a compound.",
+      options: { color: "C3D0DA" } },
+  ], { x: L + 0.4, y: 6.56, w: W - 0.8, h: 0.76, isTextBox: true, margin: 0,
+       fontFace: B, fontSize: 10.5, valign: "middle", lineSpacing: 14 });
+
+  s.addNotes("Worth dwelling on in conversation: I did not design the second-order effect, I saw it by running the loop. It is the clearest evidence that this is a system with behaviour rather than a set of scripts.");
 }
 
 // ================================================================ 12. BENCH REVIEW
 {
   const s = lightSlide();
-  chip(s, "11  ·  THE OPERATOR SURFACE");
+  chip(s, "12  ·  THE OPERATOR SURFACE");
   title(s, "Where a person actually meets the loop");
 
   s.addImage({ path: path.join(ROOT, "docs/mockups/bench_review_shot.png"),
@@ -592,7 +670,7 @@ function lightSlide() {
 // ================================================================ 13. DEFECTS
 {
   const s = darkSlide();
-  chip(s, "12  ·  WHAT WENT WRONG", { fill: SIGNAL });
+  chip(s, "13  ·  WHAT WENT WRONG", { fill: SIGNAL });
   title(s, "Five defects I found in my own build", { color: WHITE });
   kicker(s, "These are real, not hypotheticals, and they are documented in the repository. Four of the five were silent — the system looked correct while being wrong.",
     { y: 1.68, color: "8A9AA8" });
@@ -622,7 +700,7 @@ function lightSlide() {
 // ================================================================ 14. NOT BUILT
 {
   const s = lightSlide();
-  chip(s, "13  ·  SCOPE DISCIPLINE");
+  chip(s, "14  ·  SCOPE DISCIPLINE");
   title(s, "What I deliberately did not build");
   kicker(s, "Scope discipline is part of the argument, so the omissions are explicit and reasoned rather than quietly absent.", { y: 1.72 });
 
@@ -651,7 +729,7 @@ function lightSlide() {
 // ================================================================ 15. CLOSE
 {
   const s = darkSlide();
-  chip(s, "14  ·  WHY THIS, WHY ME", { fill: SIGNAL, y: 1.15 });
+  chip(s, "15  ·  WHY THIS, WHY ME", { fill: SIGNAL, y: 1.15 });
   s.addText("I am not switching careers.\nI am moving a proven delivery capability into a new domain.", {
     x: L, y: 1.72, w: 11.5, h: 1.3, isTextBox: true, margin: 0,
     fontFace: H, fontSize: 29, bold: true, color: WHITE, valign: "middle", lineSpacing: 40 });
@@ -674,7 +752,7 @@ function lightSlide() {
   s.addText("What this prototype adds is the domain-technical layer: I understand the closed loop, the data, and the governance well enough to run programmes in it.",
     { x: L, y: 5.65, w: 11.5, h: 0.6, isTextBox: true, margin: 0,
       fontFace: B, fontSize: 14, color: "C3D0DA", valign: "middle", lineSpacing: 20 });
-  s.addText("github.com/…/ai-to-lab-orchestrator   ·   47 tests   ·   docs/architecture.md",
+  s.addText("github.com/…/ai-to-lab-orchestrator   ·   65 tests   ·   docs/architecture.md",
     { x: L, y: 6.45, w: 11.5, h: 0.35, isTextBox: true, margin: 0,
       fontFace: M, fontSize: 11, color: "7E8E9C" });
   s.addNotes("Close on intent, not on modesty. The seniority question is answered by saying plainly that I am optimizing for direction and team, not title.");

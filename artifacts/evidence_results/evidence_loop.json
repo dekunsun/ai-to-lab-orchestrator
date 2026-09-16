@@ -1,0 +1,308 @@
+{
+  "generated_at": "2026-09-16T21:46:54+00:00",
+  "evidence_file": "datasets/hydrides/evidence_example.csv",
+  "policy": {
+    "policy_id": "hydride_balanced_validation",
+    "policy_name": "Balanced validation",
+    "weights": {
+      "tc_score": 0.35,
+      "synthesis_feasibility": 0.3,
+      "tc_confidence": 0.25,
+      "information_value": 0.1
+    }
+  },
+  "all_hypothetical": true,
+  "records": [
+    {
+      "evidence_id": "EV-001",
+      "formula": "LiZrH6Ru",
+      "observed_tc_k": 9.4,
+      "measurement_floor_k": 1.8,
+      "predicted_tc_k": 17.0,
+      "method": "four_point_resistivity",
+      "source_type": "hypothetical_example",
+      "recorded_by": "D. Sun",
+      "verdict": "contradicted",
+      "direction": "overestimate",
+      "reason": "Measured 9.4 K against a predicted 17 K \u2014 a 45% overestimate, outside the 25% tolerance."
+    },
+    {
+      "evidence_id": "EV-002",
+      "formula": "Ta6MoH16",
+      "observed_tc_k": null,
+      "measurement_floor_k": 8.0,
+      "predicted_tc_k": 7.3,
+      "method": "squid_susceptibility",
+      "source_type": "hypothetical_example",
+      "recorded_by": "D. Sun",
+      "verdict": "inconclusive",
+      "direction": null,
+      "reason": "No transition seen, but the rig only reached 8 K and the prediction is 7.3 K. This experiment could not have observed the transition it was testing \u2014 it refutes nothing."
+    },
+    {
+      "evidence_id": "EV-003",
+      "formula": "TaNb3H8",
+      "observed_tc_k": 6.2,
+      "measurement_floor_k": 1.8,
+      "predicted_tc_k": 7.0,
+      "method": "four_point_resistivity",
+      "source_type": "hypothetical_example",
+      "recorded_by": "D. Sun",
+      "verdict": "supported",
+      "direction": null,
+      "reason": "Measured 6.2 K against a predicted 7 K \u2014 within the 25% tolerance."
+    }
+  ],
+  "calibration": {
+    "method": "allen_dynes",
+    "n_conclusive": 2,
+    "n_inconclusive": 1,
+    "factor": 0.7193,
+    "penalty": 0.1403,
+    "description": "On 2 conclusive measurement(s), allen_dynes runs 28% high (median observed/predicted = 0.72). Confidence in every un-measured allen_dynes prediction is reduced by 14%."
+  },
+  "ranking_after": [
+    {
+      "rank": 1,
+      "was": 1,
+      "move": 0,
+      "formula": "LiZrH6Ru",
+      "score": 0.6929,
+      "score_delta": -0.0796,
+      "tc_k": 9.4,
+      "tc_source": "measured",
+      "confidence": 0.95
+    },
+    {
+      "rank": 2,
+      "was": 3,
+      "move": 1,
+      "formula": "TaNb3H8",
+      "score": 0.6543,
+      "score_delta": 0.0574,
+      "tc_k": 6.2,
+      "tc_source": "measured",
+      "confidence": 0.95
+    },
+    {
+      "rank": 3,
+      "was": 6,
+      "move": 3,
+      "formula": "EuCdH6Ru",
+      "score": 0.6237,
+      "score_delta": 0.0777,
+      "tc_k": 13.6,
+      "tc_source": "allen_dynes",
+      "confidence": 0.2579
+    },
+    {
+      "rank": 4,
+      "was": 2,
+      "move": -2,
+      "formula": "Ta6MoH16",
+      "score": 0.6232,
+      "score_delta": 0.0197,
+      "tc_k": 7.3,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 5,
+      "was": 4,
+      "move": -1,
+      "formula": "Ta3NbH8",
+      "score": 0.5579,
+      "score_delta": 0.0051,
+      "tc_k": 5.0,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 6,
+      "was": 5,
+      "move": -1,
+      "formula": "Ta6NbH16",
+      "score": 0.5579,
+      "score_delta": 0.0051,
+      "tc_k": 5.0,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 7,
+      "was": 7,
+      "move": 0,
+      "formula": "LiCeMnH6",
+      "score": 0.5518,
+      "score_delta": 0.0171,
+      "tc_k": 6.9,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 8,
+      "was": 8,
+      "move": 0,
+      "formula": "SmEuReH6",
+      "score": 0.5218,
+      "score_delta": 0.0171,
+      "tc_k": 6.9,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 9,
+      "was": 10,
+      "move": 1,
+      "formula": "EuYReH6",
+      "score": 0.5112,
+      "score_delta": 0.0298,
+      "tc_k": 7.7,
+      "tc_source": "allen_dynes",
+      "confidence": 0.4728
+    },
+    {
+      "rank": 10,
+      "was": 9,
+      "move": -1,
+      "formula": "Ce2HRh6",
+      "score": 0.5008,
+      "score_delta": 0.0058,
+      "tc_k": 5.1,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 11,
+      "was": 11,
+      "move": 0,
+      "formula": "EuCdFeH6",
+      "score": 0.4493,
+      "score_delta": 0.0077,
+      "tc_k": 5.4,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 12,
+      "was": 13,
+      "move": 1,
+      "formula": "EuLuTcH6",
+      "score": 0.4323,
+      "score_delta": 0.0451,
+      "tc_k": 10.1,
+      "tc_source": "allen_dynes",
+      "confidence": 0.4728
+    },
+    {
+      "rank": 13,
+      "was": 14,
+      "move": 1,
+      "formula": "YbGdTcH6",
+      "score": 0.4175,
+      "score_delta": 0.0419,
+      "tc_k": 9.6,
+      "tc_source": "allen_dynes",
+      "confidence": 0.4728
+    },
+    {
+      "rank": 14,
+      "was": 12,
+      "move": -2,
+      "formula": "EuTmTcH6",
+      "score": 0.4143,
+      "score_delta": 0.0265,
+      "tc_k": 8.4,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 15,
+      "was": 15,
+      "move": 0,
+      "formula": "EuErTcH6",
+      "score": 0.3916,
+      "score_delta": 0.0214,
+      "tc_k": 7.6,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 16,
+      "was": 16,
+      "move": 0,
+      "formula": "EuDyReH6",
+      "score": 0.3823,
+      "score_delta": 0.0213,
+      "tc_k": 4.9,
+      "tc_source": "allen_dynes",
+      "confidence": 0.2579
+    },
+    {
+      "rank": 17,
+      "was": 17,
+      "move": 0,
+      "formula": "EuHoTcH6",
+      "score": 0.3718,
+      "score_delta": 0.0171,
+      "tc_k": 6.9,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 18,
+      "was": 18,
+      "move": 0,
+      "formula": "EuDyTcH6",
+      "score": 0.3604,
+      "score_delta": 0.0145,
+      "tc_k": 6.5,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 19,
+      "was": 19,
+      "move": 0,
+      "formula": "TbEuTcH6",
+      "score": 0.3548,
+      "score_delta": 0.0133,
+      "tc_k": 6.3,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 20,
+      "was": 20,
+      "move": 0,
+      "formula": "EuYTcH6",
+      "score": 0.335,
+      "score_delta": 0.009,
+      "tc_k": 5.6,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 21,
+      "was": 21,
+      "move": 0,
+      "formula": "SmEuTcH6",
+      "score": 0.3264,
+      "score_delta": 0.007,
+      "tc_k": 5.3,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    },
+    {
+      "rank": 22,
+      "was": 22,
+      "move": 0,
+      "formula": "NdEuTcH6",
+      "score": 0.3208,
+      "score_delta": 0.0058,
+      "tc_k": 5.1,
+      "tc_source": "allen_dynes",
+      "confidence": 0.6448
+    }
+  ]
+}

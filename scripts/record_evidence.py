@@ -14,8 +14,10 @@ nobody has measured these compounds.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import sys
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -34,6 +36,7 @@ def main() -> None:
     ap.add_argument("--evidence", default="datasets/hydrides/evidence_example.csv")
     ap.add_argument("--policy", default=DEFAULT_POLICY)
     ap.add_argument("--top", type=int, default=8)
+    ap.add_argument("--out", default="artifacts/evidence_results")
     ap.add_argument("--no-persist", action="store_true")
     args = ap.parse_args()
 
@@ -124,7 +127,51 @@ def main() -> None:
         print(f"\n  {len(scored)} record(s) written to db/lab.sqlite · "
               f"{settled} hypothesis(es) settled")
         print("  Inconclusive results leave their hypothesis open — an experiment was "
-              "spent\n  without answering the question, and the registry keeps that fact.\n")
+              "spent\n  without answering the question, and the registry keeps that fact.")
+
+    artifact = _write_artifact(args.out, args.evidence, policy, scored, cal,
+                               before, after, before_rank, before_score)
+    print(f"\n  wrote {artifact}\n")
+
+
+def _write_artifact(out_dir, evidence_path, policy, scored, cal, before, after,
+                    before_rank, before_score):
+    """Persist the whole before/after picture so downstream readers - the
+    dashboard, the deck - never have to re-derive or hand-copy these numbers."""
+    os.makedirs(out_dir, exist_ok=True)
+    payload = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "evidence_file": evidence_path,
+        "policy": policy.provenance(),
+        "all_hypothetical": all(ev.is_hypothetical for ev, _, _ in scored),
+        "records": [
+            {"evidence_id": ev.evidence_id, "formula": ev.formula,
+             "observed_tc_k": ev.observed_tc_k,
+             "measurement_floor_k": ev.measurement_floor_k,
+             "predicted_tc_k": p, "method": ev.method,
+             "source_type": ev.source_type, "recorded_by": ev.recorded_by,
+             "verdict": a["status"], "direction": a.get("direction"),
+             "reason": a["reason"]}
+            for ev, a, p in scored],
+        "calibration": {
+            "method": cal.method, "n_conclusive": cal.n,
+            "n_inconclusive": cal.inconclusive,
+            "factor": cal.factor, "penalty": cal.penalty,
+            "description": cal.describe()},
+        "ranking_after": [
+            {"rank": rc.rank, "was": before_rank[rc.candidate.candidate_id],
+             "move": before_rank[rc.candidate.candidate_id] - rc.rank,
+             "formula": rc.candidate.formula, "score": rc.score,
+             "score_delta": round(rc.score - before_score[rc.candidate.candidate_id], 4),
+             "tc_k": rc.candidate.best_tc_k,
+             "tc_source": rc.candidate.derivation["tc"]["method"],
+             "confidence": rc.candidate.metrics["tc_confidence"]}
+            for rc in after],
+    }
+    path = os.path.join(out_dir, "evidence_loop.json")
+    with open(path, "w") as f:
+        json.dump(payload, f, indent=2)
+    return path
 
 
 if __name__ == "__main__":
