@@ -1,0 +1,39 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest tests/ -q
+
+      # The three entry points are the repo's actual claims. A green test suite
+      # with a broken CLI would be a worse lie than a red one.
+      - name: Smoke-test the closed loop
+        run: python run_cdte_demo.py --budget 6 --seed 0 --no-persist
+
+      - name: Smoke-test hydride triage
+        run: python scripts/run_hydride_triage.py --no-persist
+
+      - name: Smoke-test the evidence loop
+        run: python scripts/record_evidence.py --no-persist
+
+      - name: Benchmark numbers in the README must still be reproducible
+        run: |
+          python scripts/run_cdte_benchmark.py --seeds 4 --budget 10 \
+            --out "${RUNNER_TEMP}/bench"

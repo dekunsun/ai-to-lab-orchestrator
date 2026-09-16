@@ -8,16 +8,46 @@ clean results back to close the loop.
 > This repo is a **systems / orchestration** portfolio, not a physics simulator.
 > See "Scientific modeling scope" below.
 
+[![tests](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+
 ---
 
-## Status: Phase 1 complete + benchmark hardened
+## What this is
 
-The full closed loop runs end-to-end:
+Two use cases, chosen to sit on opposite sides of one line: **where physical
+fidelity matters, use published data; where systems benchmarking matters, use a
+transparent surrogate that is honest about being one.**
+
+- **CdTe thin-film process optimization** — a closed loop against a deliberately
+  hard noisy surrogate. Bayesian optimization reaches a median best of **0.818**
+  against random search's **0.724** over 30 seeds, winning on 20 of them.
+- **Hydride superconductor triage** — 22 candidates transcribed verbatim from a
+  published paper, with **no simulated physics at all**. Ranking, sensitivity
+  analysis, and a validation plan that enters the same executor.
 
 ```
 YAML workflow → safety gate → executor → noisy CdTe surrogate devices
             → SQLite logging → optimizer feedback → next experiment → repeat
+
+published candidates → policy ranking → validation plan → the same safety gate
+            → hypothesis → evidence → re-ranked cohort
 ```
+
+![benchmark](artifacts/benchmark_results/cdte_convergence.png)
+
+The parts worth reading first: [what the triage surfaced that a Tc-ordered list
+cannot](#what-the-triage-actually-surfaces), [how to read the benchmark
+honestly](#benchmark-results), and the five real defects in
+[docs/architecture.md §5](docs/architecture.md) — four of which were silent, in
+the sense that the system looked correct while being wrong.
+
+**Portfolio materials:** [deck](docs/deck/ai_to_lab_orchestrator.pdf) ·
+[architecture](docs/architecture.md) · [demo script](docs/demo_script.md) ·
+[bench-review prototype](docs/mockups/bench_review.html)
+
+---
+
+## Quickstart
 
 ### Setup
 
@@ -260,15 +290,18 @@ lab's seam is.
 
 ---
 
-## Architecture (4 layers)
+## Architecture (5 layers)
 
 1. **Orchestration** — `orchestrator/`: YAML parser, safety gate, executor.
-2. **Data** — `db/`: SQLite store (experiments / steps / artifacts).
+2. **Data** — `db/`: SQLite store (experiments, steps, artifacts, hypotheses,
+   evidence).
 3. **Decision** — `optimizer/`: transparent GP + Expected-Improvement BO, random
    baseline, soft failure-avoidance + an escape hatch for infeasible regions.
    `policy/`: configurable weighted objectives. `triage/`: hydride candidate
    ranking, sensitivity analysis and validation-plan generation.
 4. **Devices** — `devices/cdte/`: surrogate landscape + 6 virtual instruments.
+5. **Governance** — the safety gate's block/flag verdicts, the hypothesis
+   registry, and the data-quality threshold that decides what may condition a model.
 
 Full design rationale, including the trade-offs I chose *against*, is in
 [docs/architecture.md](docs/architecture.md).
@@ -331,6 +364,21 @@ validation planning on top of them.
 
 ---
 
+## Data attribution and licence
+
+The code is MIT licensed — see [LICENSE](LICENSE).
+
+`datasets/hydrides/gnome_hydride_candidates.csv` is a transcription of Tables 1
+and 2 of Sanna, Cerqueira, Cubuk, Errea & Fang, *Search for thermodynamically
+stable ambient-pressure superconducting hydrides in the GNoME database*,
+**Communications Physics (2026)** —
+[paper](https://www.nature.com/articles/s42005-026-02552-4). Those values belong
+to the authors and are reproduced here as factual data with attribution; see
+[datasets/hydrides/SOURCE.md](datasets/hydrides/SOURCE.md) for exactly what was
+transcribed and what was not.
+
+---
+
 ## Roadmap
 
 - [x] **Phase 1** — closed loop: YAML → executor → surrogate → SQLite → BO
@@ -341,8 +389,13 @@ validation planning on top of them.
 - [x] **Phase 4** — governance surfaced: safety verdicts, failure taxonomy and
       hypothesis registry in the Command Center
 - [x] **Phase 5a** — Streamlit dashboard, three views
-- [x] **Phase 5b** — portfolio deck (`docs/deck/`, 15 slides, rebuilt from the
-      benchmark and triage artifacts so it cannot drift from the code)
-- [ ] **Phase 5c** — demo video
+- [x] **Phase 5b** — portfolio deck (`docs/deck/`, 16 slides, rebuilt from the
+      benchmark, triage and evidence artifacts so it cannot drift from the code)
 - [x] **Evidence loop** — measurements settle hypotheses, calibrate the method,
       and re-rank the cohort
+- [ ] **Phase 5c** — demo video
+
+Known gaps are listed honestly in [docs/architecture.md §8](docs/architecture.md):
+four of the eight planned tables, no per-experiment trace view, and execution is
+synchronous rather than a real task queue. None of them changes the argument,
+which is why they are still open.
