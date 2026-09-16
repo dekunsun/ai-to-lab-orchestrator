@@ -1,0 +1,14 @@
+policy_id: cdte_balanced_device_quality
+name: Balanced device quality
+applies_to: cdte
+description: >
+  Default policy. Weights raw device performance most heavily but keeps
+  structural quality in the objective, so the optimizer cannot chase a
+  high-performing cell that is structurally poor. These are the weights the
+  benchmark in the README was run with.
+
+weights:
+  pce_proxy: 0.45
+  crystallinity_score: 0.20
+  defect_passivation_score: 0.20
+  phase_purity: 0.15

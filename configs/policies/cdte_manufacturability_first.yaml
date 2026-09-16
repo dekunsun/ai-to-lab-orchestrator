@@ -1,0 +1,14 @@
+policy_id: cdte_manufacturability_first
+name: Manufacturability first
+applies_to: cdte
+description: >
+  Prioritizes structural quality and phase purity over peak performance. The
+  rationale is the one a process engineer would give: a single hero cell is
+  worth less than a process window that reproduces across a run. Expect a lower
+  headline score and a more conservative operating point.
+
+weights:
+  crystallinity_score: 0.30
+  phase_purity: 0.30
+  defect_passivation_score: 0.25
+  pce_proxy: 0.15

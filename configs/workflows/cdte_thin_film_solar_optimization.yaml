@@ -1,0 +1,72 @@
+workflow_id: cdte_thin_film_solar_optimization_v1
+project: cdte_solar_cell_process_optimization
+
+objective:
+  name: maximize_cdte_device_quality
+  # The optimizer maximizes `objective_score` produced by the scoring_engine.
+  # These listed metrics are the measurements that feed into it.
+  metrics:
+    - pce_proxy
+    - crystallinity_score
+    - phase_purity
+    - defect_passivation_score
+
+parameters:
+  cdte_thickness_nm:
+    type: float
+    min: 800
+    max: 4000
+  substrate_temp_c:
+    type: float
+    min: 250
+    max: 550
+  cdcl2_treatment_temp_c:
+    type: float
+    min: 330
+    max: 470
+  cdcl2_treatment_time_min:
+    type: float
+    min: 5
+    max: 60
+  dopant_pct:
+    type: float
+    min: 0.0
+    max: 3.0
+
+# Guardrails checked by the safety gate BEFORE any device runs.
+# Not a chemical-safety model — a demonstration that autonomous execution must
+# pass through validation + bounds + hazard rules + a human-reviewable verdict.
+#
+# Note on where these thresholds sit: the surrogate's true degradation region is
+# temp > 450 AND time > 45. The blocking rule below is deliberately WIDER than
+# that (440 / 40). A safety policy has to be precautionary — in a real lab you
+# do not know exactly where the cliff is, so the guardrail is set inside the
+# uncertainty band. This costs the optimizer some reachable search space, and
+# that trade-off is the point: governance is not free.
+safety:
+  hazard_rules:
+    - name: overtreatment_degradation_risk
+      # hot AND long: each bound is individually legal, the combination is not
+      condition: "cdcl2_treatment_temp_c > 440 and cdcl2_treatment_time_min > 40"
+      risk_level: high
+      action: block
+
+    - name: approaching_overtreatment_cliff
+      # single-parameter early warning: proceeds, but the run carries the flag
+      condition: "cdcl2_treatment_temp_c > 430"
+      risk_level: medium
+      action: flag
+
+steps:
+  - name: deposit_cdte_absorber
+    device: thin_film_deposition_simulator
+  - name: cdcl2_activation
+    device: cdcl2_treatment_simulator
+  - name: characterize_structure
+    device: xrd_simulator
+  - name: characterize_optical
+    device: optical_spectroscopy_simulator
+  - name: simulate_device_performance
+    device: solar_cell_jv_simulator
+  - name: compute_objective
+    device: scoring_engine

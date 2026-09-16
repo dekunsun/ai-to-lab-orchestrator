@@ -1,0 +1,8 @@
+numpy
+pyyaml
+scikit-learn
+scipy
+matplotlib          # benchmark convergence chart
+pytest              # tests/
+# Phase 5 (dashboard): streamlit
+# Optional drop-in for the optimizer: ax-platform

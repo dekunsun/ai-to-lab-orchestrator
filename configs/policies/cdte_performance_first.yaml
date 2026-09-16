@@ -1,0 +1,14 @@
+policy_id: cdte_performance_first
+name: Performance first
+applies_to: cdte
+description: >
+  Aggressive exploration policy: almost all weight on the performance proxy.
+  Appropriate when the goal is to find the ceiling of what the process can do
+  and structural quality will be dealt with later. Expect the optimizer to
+  push closer to the over-treatment cliff, and expect a higher failure rate.
+
+weights:
+  pce_proxy: 0.70
+  crystallinity_score: 0.10
+  defect_passivation_score: 0.10
+  phase_purity: 0.10
