@@ -1,0 +1,4 @@
+evidence_id,candidate_id,formula,observed_tc_k,measurement_floor_k,method,source_type,source,recorded_by,notes
+EV-001,HYD-018,LiZrH6Ru,9.4,1.8,four_point_resistivity,hypothetical_example,worked_example_not_a_real_measurement,D. Sun,"HYPOTHETICAL. Illustrates the case the paper's own caveats point at: a transition well below even the refined 17 K estimate."
+EV-002,HYD-022,Ta6MoH16,,8.0,squid_susceptibility,hypothetical_example,worked_example_not_a_real_measurement,D. Sun,"HYPOTHETICAL. Null result, but the rig bottomed out at 8.0 K and the prediction is 7.3 K - the run could not have seen the transition it was testing."
+EV-003,HYD-020,TaNb3H8,6.2,1.8,four_point_resistivity,hypothetical_example,worked_example_not_a_real_measurement,D. Sun,"HYPOTHETICAL. Within tolerance of the 7.0 K prediction."

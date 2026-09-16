@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-16T20:50:08+00:00",
+  "generated_at": "2026-09-16T21:39:23+00:00",
   "dataset": "datasets/hydrides/gnome_hydride_candidates.csv",
   "policy": {
     "policy_id": "hydride_balanced_validation",
@@ -49,6 +49,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -92,6 +93,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -135,6 +137,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -178,6 +181,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -221,6 +225,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -264,6 +269,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -307,6 +313,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -350,6 +357,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -393,6 +401,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -436,6 +445,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -479,6 +489,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -522,6 +533,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -565,6 +577,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -608,6 +621,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -651,6 +665,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -694,6 +709,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -737,6 +753,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -780,6 +797,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -823,6 +841,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -866,6 +885,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -909,6 +929,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",
@@ -952,6 +973,7 @@
           "rule_set_id": "element_feasibility_v1"
         },
         "tc_normalized_against_k": 17.0,
+        "calibration": null,
         "provenance": {
           "tc_score": "derived from published Tc",
           "tc_confidence": "derived from published \u03bb + refinement status",

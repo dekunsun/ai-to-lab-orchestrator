@@ -50,6 +50,24 @@ CREATE TABLE IF NOT EXISTS hypotheses (
     detail_json TEXT,
     created_at TEXT
 );
+CREATE TABLE IF NOT EXISTS evidence (
+    evidence_id TEXT PRIMARY KEY,
+    hypothesis_id TEXT,
+    candidate_id TEXT,
+    formula TEXT,
+    observed_tc_k REAL,           -- NULL means no transition was seen
+    measurement_floor_k REAL,     -- lowest temperature actually probed
+    method TEXT,
+    source_type TEXT,             -- measured / published / collaborator_report / hypothetical_example
+    source TEXT,
+    recorded_by TEXT,             -- evidence nobody will sign for is not evidence
+    verdict TEXT,                 -- supported / contradicted / inconclusive
+    direction TEXT,               -- overestimate / underestimate / NULL
+    predicted_tc_k REAL,
+    reason TEXT,
+    notes TEXT,
+    recorded_at TEXT
+);
 CREATE TABLE IF NOT EXISTS artifacts (
     artifact_pk INTEGER PRIMARY KEY AUTOINCREMENT,
     experiment_id TEXT,
@@ -78,6 +96,45 @@ def save_hypothesis(conn: sqlite3.Connection, hyp: dict[str, Any], source: str) 
          source, json.dumps(hyp), datetime.now(timezone.utc).isoformat(timespec="seconds")),
     )
     conn.commit()
+
+
+def save_evidence(conn: sqlite3.Connection, ev: Any, assessment: dict[str, Any],
+                  predicted_tc_k: float, hypothesis_id: str | None) -> None:
+    conn.execute(
+        """INSERT OR REPLACE INTO evidence
+           (evidence_id, hypothesis_id, candidate_id, formula, observed_tc_k,
+            measurement_floor_k, method, source_type, source, recorded_by,
+            verdict, direction, predicted_tc_k, reason, notes, recorded_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+        (ev.evidence_id, hypothesis_id, ev.candidate_id, ev.formula, ev.observed_tc_k,
+         ev.measurement_floor_k, ev.method, ev.source_type, ev.source, ev.recorded_by,
+         assessment["status"], assessment.get("direction"), predicted_tc_k,
+         assessment["reason"], ev.notes,
+         datetime.now(timezone.utc).isoformat(timespec="seconds")),
+    )
+    conn.commit()
+
+
+def update_hypothesis_status(conn: sqlite3.Connection, hypothesis_id: str,
+                             status: str, evidence_summary: str) -> bool:
+    """Move a hypothesis from proposed to settled — the point of the registry.
+
+    An inconclusive result deliberately does NOT clear the hypothesis: the
+    question is still open, and recording it as resolved would lose the fact
+    that an experiment was spent without answering it.
+    """
+    row = conn.execute("SELECT detail_json FROM hypotheses WHERE hypothesis_id = ?",
+                       (hypothesis_id,)).fetchone()
+    if row is None:
+        return False
+    detail = json.loads(row[0]) if row[0] else {}
+    detail["status"] = status
+    detail["evidence_summary"] = evidence_summary
+    conn.execute(
+        "UPDATE hypotheses SET status = ?, detail_json = ? WHERE hypothesis_id = ?",
+        (status, json.dumps(detail), hypothesis_id))
+    conn.commit()
+    return True
 
 
 def _migrate(conn: sqlite3.Connection) -> None:

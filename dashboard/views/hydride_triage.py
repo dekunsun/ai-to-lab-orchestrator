@@ -9,7 +9,8 @@ import pandas as pd
 import streamlit as st
 
 from policy.weighted_policy import WeightedPolicy
-from triage.hydride_loader import load
+from triage.evidence import calibrate, assess, load_evidence
+from triage.hydride_loader import derive_metrics, load, load_candidates
 from triage.ranking import consensus_shortlist, rank, sensitivity
 from triage.validation_plan import build_workflow, hypothesis_for
 
@@ -31,9 +32,22 @@ METRIC_HELP = {
 }
 
 
+EVIDENCE_FILE = "datasets/hydrides/evidence_example.csv"
+
+
 @st.cache_data(ttl=60)
-def _candidates():
-    return load()
+def _candidates(with_evidence: bool = False):
+    if not with_evidence:
+        return load()
+    return derive_metrics(load_candidates(), evidence=load_evidence(EVIDENCE_FILE))
+
+
+@st.cache_data(ttl=60)
+def _evidence():
+    try:
+        return load_evidence(EVIDENCE_FILE)
+    except Exception:
+        return []
 
 
 @st.cache_data(ttl=60)
@@ -45,8 +59,18 @@ def _preset_policies():
 def render() -> None:
     st.subheader("Hydride Candidate Triage")
 
+    records = _evidence()
+    apply_evidence = False
+    if records:
+        apply_evidence = st.toggle(
+            f"Apply {len(records)} recorded evidence record(s)", value=False,
+            help="Re-rank the cohort with measurements folded in. A measured Tc "
+                 "replaces its prediction, and conclusive evidence calibrates the "
+                 "method for every candidate that still rests on it.")
+
     try:
-        candidates = _candidates()
+        candidates = _candidates(apply_evidence)
+        baseline = _candidates(False)
         presets = _preset_policies()
     except Exception as e:
         st.error(f"Could not load the hydride dataset: {e}")
@@ -59,7 +83,23 @@ def render() -> None:
         f"Allen–Dynes Tc are published values; confidence and feasibility are derived "
         f"or analyst judgment, kept in separate files. See `datasets/hydrides/SOURCE.md`.")
 
-    if n_refined < len(candidates):
+    if apply_evidence:
+        hypothetical = [r for r in records if r.is_hypothetical]
+        if hypothetical:
+            st.error(
+                f"**{len(hypothetical)} of {len(records)} evidence records are marked "
+                f"`hypothetical_example`.** Nobody has measured these compounds. They "
+                f"exist to exercise the loop, not to make a claim about the materials — "
+                f"do not quote anything below as a result.")
+        pred = {c.candidate_id: c.best_tc_k for c in baseline}
+        cal = calibrate([assess(r, pred[r.candidate_id]) for r in records
+                         if r.candidate_id in pred])
+        st.info("**Method calibration.** " + cal.describe() +
+                (f" {cal.inconclusive} inconclusive record(s) excluded — an experiment "
+                 f"that could not have seen the effect is not evidence the effect is "
+                 f"absent." if cal.inconclusive else ""))
+
+    if n_refined < len(candidates) and not apply_evidence:
         st.warning(
             f"**Only {n_refined} of {len(candidates)} candidates has a beyond-Allen–Dynes "
             f"Tc.** For that one, refinement moved 23.5 K → 17 K, which the authors call "
@@ -121,13 +161,18 @@ def render() -> None:
 
     # ---------------- ranking ----------------
     ranked = rank(candidates, policy)
+    was = {rc.candidate.candidate_id: rc.rank for rc in rank(baseline, policy)}
     rows = []
     for rc in ranked:
         c, d = rc.candidate, rc.candidate.derivation
+        move = was[c.candidate_id] - rc.rank
         rows.append({
-            "#": rc.rank, "Formula": c.formula, "Score": rc.score,
+            "#": rc.rank,
+            "Move": ("—" if move == 0 else f"{move:+d}") if apply_evidence else "",
+            "Formula": c.formula, "Score": rc.score,
             "Tc (K)": c.best_tc_k,
-            "Tc source": "refined" if c.has_refined_tc else "Allen–Dynes",
+            "Tc source": ("measured" if c.has_measured_tc
+                          else "refined" if c.has_refined_tc else "Allen–Dynes"),
             "λ": c.lambda_ep,
             "Confidence": c.metrics["tc_confidence"],
             "Feasibility": c.metrics["synthesis_feasibility"],
@@ -135,6 +180,8 @@ def render() -> None:
             "Family": "double perovskite" if "perovskite" in c.structure_family else "fluorite-like",
         })
     df = pd.DataFrame(rows)
+    if not apply_evidence:
+        df = df.drop(columns=["Move"])
 
     st.markdown("#### Ranking")
     st.dataframe(
@@ -211,6 +258,10 @@ def render() -> None:
              "Provenance": "published — paper table"},
             {"Quantity": "Allen–Dynes Tc", "Value": f"{c.tc_allen_dynes_k:.1f} K",
              "Provenance": "published — paper table"},
+            {"Quantity": "Measured Tc",
+             "Value": f"{c.measured_tc_k:.1f} K" if c.has_measured_tc else "not measured",
+             "Provenance": "evidence \u2014 recorded from outside the system"
+                           if c.has_measured_tc else "no evidence recorded"},
             {"Quantity": "Refined Tc",
              "Value": f"{c.tc_refined_k:.1f} K" if c.has_refined_tc else "not reported",
              "Provenance": "published" if c.has_refined_tc else "missing — not imputed"},

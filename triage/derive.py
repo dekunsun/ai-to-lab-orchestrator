@@ -117,21 +117,37 @@ def synthesis_feasibility(formula: str, rules: FeasibilityRules) -> dict[str, An
 # --------------------------------------------------------------------------
 # derived confidence and Tc selection
 # --------------------------------------------------------------------------
-def tc_confidence(lambda_ep: float, has_refined: bool) -> dict[str, Any]:
-    """How much to trust this candidate's Tc, given how it was obtained."""
+def tc_confidence(lambda_ep: float, has_refined: bool, has_measured: bool = False,
+                  calibration_penalty: float = 0.0) -> dict[str, Any]:
+    """How much to trust this candidate's Tc, given how it was obtained.
+
+    A measured value outranks any calculation, so direct evidence short-circuits
+    the coupling-regime reasoning entirely. Absent that, a method-level
+    calibration penalty applies: if the method has been caught running high on
+    the compounds we did measure, every un-measured prediction it produced is
+    worth less than it was yesterday.
+    """
+    if has_measured:
+        from triage.evidence import MEASURED_CONFIDENCE
+        return {"score": MEASURED_CONFIDENCE,
+                "rationale": "measured directly; only sample-quality and instrument "
+                             "uncertainty remain"}
+
     for threshold, base, rationale in COUPLING_BANDS:
         if lambda_ep >= threshold:
             break
     score = base + (REFINEMENT_BONUS if has_refined else 0.0)
-    return {
-        "score": round(min(1.0, score), 4),
-        "rationale": rationale + (
-            "; a beyond-Allen-Dynes calculation exists" if has_refined
-            else "; Allen-Dynes only, not independently refined"),
-    }
+    score = min(1.0, score) * (1.0 - calibration_penalty)
+    rationale += ("; a beyond-Allen-Dynes calculation exists" if has_refined
+                  else "; Allen-Dynes only, not independently refined")
+    if calibration_penalty > 0:
+        rationale += (f"; reduced {calibration_penalty:.0%} by evidence that the "
+                      f"method runs high")
+    return {"score": round(score, 4), "rationale": rationale}
 
 
-def best_available_tc(tc_allen_dynes: float, tc_refined: float | None) -> dict[str, Any]:
+def best_available_tc(tc_allen_dynes: float, tc_refined: float | None,
+                      tc_measured: float | None = None) -> dict[str, Any]:
     """Prefer a refined Tc where one exists, and say which was used.
 
     Only one of the 22 candidates has been refined, so most of this ranking
@@ -139,6 +155,12 @@ def best_available_tc(tc_allen_dynes: float, tc_refined: float | None) -> dict[s
     Recording `method` keeps that visible instead of flattening both kinds of
     estimate into one indistinguishable column.
     """
+    if tc_measured is not None:
+        # A measurement supersedes every calculation. The predicted values are
+        # kept alongside it so the size of the miss stays on the record.
+        return {"value_k": tc_measured, "method": "measured",
+                "allen_dynes_k": tc_allen_dynes, "refined_k": tc_refined,
+                "delta_vs_allen_dynes": round(tc_measured - tc_allen_dynes, 2)}
     if tc_refined is not None:
         return {"value_k": tc_refined, "method": "refined",
                 "allen_dynes_k": tc_allen_dynes,

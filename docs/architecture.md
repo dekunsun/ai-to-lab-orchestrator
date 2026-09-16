@@ -172,7 +172,31 @@ project's purpose is to *explain* a closed loop, and a black box cannot be
 explained. It also paid off directly — see §5.1. In production, Ax or Optuna
 drops in behind the same interface without the orchestrator noticing.
 
-### 4.6 Governance must be able to say no
+### 4.6 Evidence is received, never manufactured
+
+There are no hydride devices, so evidence enters from outside: an instrument, a
+collaborator, a paper. `triage/evidence.py` owns what happens next — validating
+the record, deciding what it settles, and propagating the consequence back into
+the ranking that proposed the experiment.
+
+Three rules carry it:
+
+- **A null result is uninterpretable without its measurement floor.** "No
+  transition seen" refutes nothing if the rig never reached the predicted Tc.
+  That case is `inconclusive`: excluded from calibration, and its hypothesis
+  stays open, because an experiment was spent without answering the question.
+- **Evidence about one compound calibrates the method.** 21 of 22 candidates
+  rest on Allen-Dynes alone, so catching it running high on the one compound
+  measured is information about the other twenty.
+- **A calibration lowers confidence and never rewrites a prediction.** Producing
+  a "corrected" Tc would manufacture a value nobody computed. The predicted
+  numbers stay on the record so the size of the miss is not lost.
+
+Evidence also has to be attributable: a record without a `recorded_by` or a
+stated `source_type` is rejected at load. A measurement nobody will sign for
+cannot be used to overturn a prediction.
+
+### 4.7 Governance must be able to say no
 
 A guardrail that only annotates is decoration. Hazard rules carry an explicit
 `action`: `block` stops the experiment before any device runs; `flag` records
@@ -284,17 +308,13 @@ Scope discipline is part of the argument, so the omissions are explicit.
 
 Honest current state, in rough priority order:
 
-1. **No evidence loop back into triage.** Triage now feeds the executor, but
-   nothing feeds back: a completed validation should mark its hypothesis
-   supported or contradicted and update that candidate's confidence, re-ranking
-   the cohort. The forward path exists; the return path does not.
-2. **Four planned tables are still missing**: `measurements`, `failures`,
+1. **Four planned tables are still missing**: `measurements`, `failures`,
    `safety_reviews`, `model_feedback`. Their content lives inside JSON columns,
    which limits what a governance view can query.
-3. **Execution is synchronous.** Fine for a benchmark; the `queued/running`
+2. **Execution is synchronous.** Fine for a benchmark; the `queued/running`
    states in the state-machine story are not yet real.
-4. **No dashboard.** Only the Bench Review prototype in `docs/mockups/` exists;
-   nothing can currently be shown to a non-technical reviewer without reading code.
+3. **No CdTe experiment trace view.** The dashboard summarises experiments but
+   cannot yet walk a single run step by step.
 5. **The hydride transcription came from the preprint HTML**, not the published
    PDF, and the refined-Tc figure for LiZrH6Ru is reported four different ways in
    the paper. See `datasets/hydrides/SOURCE.md` before quoting it.

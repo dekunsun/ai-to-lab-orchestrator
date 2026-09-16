@@ -64,7 +64,7 @@ agreement by construction. A PDF export sits beside it.
 
 ```bash
 ./.venv/bin/python scripts/run_cdte_benchmark.py --seeds 30 --budget 30
-./.venv/bin/python -m pytest tests/ -q          # 47 tests
+./.venv/bin/python -m pytest tests/ -q          # 65 tests
 ```
 
 ---
@@ -190,6 +190,54 @@ Three findings the ranking exists to produce:
    you validate regardless of whose priorities win the argument. EuCdH₆Ru moving
    2 → 9 is the honest warning label on the rest.
 
+### The loop closes: evidence changes the ranking that proposed the experiment
+
+```bash
+./.venv/bin/python scripts/record_evidence.py
+```
+
+Evidence enters from **outside** the system — an instrument, a collaborator, a
+paper. Nothing here simulates a measurement. The shipped example file is marked
+`hypothetical_example` on every row and the tooling says so loudly, because
+nobody has measured these compounds.
+
+Two judgments do the work:
+
+**A null result is meaningless without its floor.** "We saw no transition" says
+nothing until you know the lowest temperature probed. If a rig reached only 8 K
+and the prediction was 7.3 K, the experiment could not have observed the thing
+it was testing — that is `inconclusive`, it is excluded from calibration, and it
+leaves its hypothesis open. Counting it as agreement would quietly reward
+under-powered runs.
+
+**Evidence about one compound is evidence about the method.** 21 of 22
+candidates rest on Allen–Dynes alone, so a measurement that catches the method
+running high bears on all of them:
+
+```
+On 2 conclusive measurements, allen_dynes runs 28% high (median observed/predicted
+= 0.72). Confidence in every un-measured allen_dynes prediction is reduced by 14%.
+```
+
+A calibration lowers *confidence*; it never rewrites a prediction. Producing a
+"corrected" Tc would invent a number nobody computed — there is a test for that.
+
+The cohort then re-ranks, a measured Tc supersedes any calculation, and the
+hypothesis moves from `proposed` to `supported` / `contradicted`:
+
+| | # | was | move | Tc (K) | source | confidence |
+|---|--:|--:|--:|--:|---|--:|
+| LiZrH₆Ru | 1 | 1 | — | 9.4 | measured | 0.95 |
+| TaNb₃H₈ | 2 | 3 | +1 | 6.2 | measured | 0.95 |
+| EuCdH₆Ru | 3 | 6 | **+3** | 13.6 | Allen–Dynes | 0.26 |
+| Ta₆MoH₁₆ | 4 | 2 | **−2** | 7.3 | Allen–Dynes | 0.64 |
+
+Note the second-order effect: measuring the leader low moved candidates **nobody
+tested**. Tc is normalized against the best in the cohort, so when the leader
+falls every untested compound becomes relatively more attractive — partly offset
+by the confidence penalty the same evidence applied to the method. A ranking is
+a statement about a set, not about a compound.
+
 ### Triage is an entry point into the loop, not a separate module
 
 The selected candidate becomes a workflow that goes through the **same** parser
@@ -296,5 +344,5 @@ validation planning on top of them.
 - [x] **Phase 5b** — portfolio deck (`docs/deck/`, 15 slides, rebuilt from the
       benchmark and triage artifacts so it cannot drift from the code)
 - [ ] **Phase 5c** — demo video
-- [ ] **Evidence loop** — a completed validation should mark its hypothesis
-      supported or contradicted and re-rank the cohort (see `docs/architecture.md` §8)
+- [x] **Evidence loop** — measurements settle hypotheses, calibrate the method,
+      and re-rank the cohort

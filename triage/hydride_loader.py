@@ -54,13 +54,20 @@ class HydrideCandidate:
     # --- derived: filled by derive_metrics(), never read from the CSV ---
     metrics: dict[str, float] = field(default_factory=dict)
     derivation: dict[str, Any] = field(default_factory=dict)
+    measured_tc_k: float | None = None      # set only by evidence, never by the CSV
 
     @property
     def has_refined_tc(self) -> bool:
         return self.tc_refined_k is not None
 
     @property
+    def has_measured_tc(self) -> bool:
+        return self.measured_tc_k is not None
+
+    @property
     def best_tc_k(self) -> float:
+        if self.measured_tc_k is not None:
+            return self.measured_tc_k
         return self.tc_refined_k if self.has_refined_tc else self.tc_allen_dynes_k
 
 
@@ -99,7 +106,8 @@ def load_candidates(path: str = DATASET) -> list[HydrideCandidate]:
 
 
 def derive_metrics(candidates: list[HydrideCandidate],
-                   rules_path: str = FEASIBILITY_RULES) -> list[HydrideCandidate]:
+                   rules_path: str = FEASIBILITY_RULES,
+                   evidence: list | None = None) -> list[HydrideCandidate]:
     """Attach the four normalized metrics a policy scores.
 
     Tc is normalized against the best candidate *in this cohort*, not against an
@@ -108,13 +116,40 @@ def derive_metrics(candidates: list[HydrideCandidate],
     and it means adding a better candidate correctly demotes everything else.
     """
     rules = FeasibilityRules.from_yaml(rules_path)
+
+    # Fold in any evidence: a measurement replaces this candidate's predicted Tc,
+    # and conclusive evidence anywhere in the cohort calibrates the method for
+    # every candidate that still rests on it.
+    measured: dict[str, float] = {}
+    calibration = None
+    if evidence:
+        from triage.evidence import assess, calibrate
+        by_id = {c.candidate_id: c for c in candidates}
+        assessments = []
+        for ev in evidence:
+            c = by_id.get(ev.candidate_id)
+            if c is None:
+                continue
+            a = assess(ev, c.best_tc_k)
+            a["evidence"] = ev
+            assessments.append(a)
+            if ev.observed_tc_k is not None and a["status"] != "inconclusive":
+                measured[ev.candidate_id] = ev.observed_tc_k
+        calibration = calibrate(assessments)
+
+    for c in candidates:
+        c.measured_tc_k = measured.get(c.candidate_id)
+
     max_tc = max(c.best_tc_k for c in candidates)
     if max_tc <= 0:
         raise DatasetError("no candidate has a positive Tc; nothing to rank")
 
+    penalty = calibration.penalty if calibration else 0.0
     for c in candidates:
-        tc = best_available_tc(c.tc_allen_dynes_k, c.tc_refined_k)
-        conf = tc_confidence(c.lambda_ep, c.has_refined_tc)
+        has_measured = c.measured_tc_k is not None
+        tc = best_available_tc(c.tc_allen_dynes_k, c.tc_refined_k, c.measured_tc_k)
+        conf = tc_confidence(c.lambda_ep, c.has_refined_tc, has_measured,
+                             0.0 if has_measured else penalty)
         feas = synthesis_feasibility(c.formula, rules)
 
         tc_score = round(tc["value_k"] / max_tc, 4)
@@ -127,6 +162,7 @@ def derive_metrics(candidates: list[HydrideCandidate],
         c.derivation = {
             "tc": tc, "confidence": conf, "feasibility": feas,
             "tc_normalized_against_k": max_tc,
+            "calibration": calibration.describe() if calibration else None,
             "provenance": {
                 "tc_score": "derived from published Tc",
                 "tc_confidence": "derived from published λ + refinement status",
@@ -137,5 +173,6 @@ def derive_metrics(candidates: list[HydrideCandidate],
     return candidates
 
 
-def load(path: str = DATASET, rules_path: str = FEASIBILITY_RULES) -> list[HydrideCandidate]:
-    return derive_metrics(load_candidates(path), rules_path)
+def load(path: str = DATASET, rules_path: str = FEASIBILITY_RULES,
+         evidence: list | None = None) -> list[HydrideCandidate]:
+    return derive_metrics(load_candidates(path), rules_path, evidence)

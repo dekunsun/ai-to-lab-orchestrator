@@ -70,6 +70,20 @@ def hypotheses() -> pd.DataFrame:
         conn.close()
 
 
+@st.cache_data(ttl=5)
+def evidence() -> pd.DataFrame:
+    conn = _connect()
+    if conn is None:
+        return pd.DataFrame()
+    try:
+        return pd.read_sql_query(
+            "SELECT * FROM evidence ORDER BY recorded_at DESC", conn)
+    except Exception:
+        return pd.DataFrame()
+    finally:
+        conn.close()
+
+
 @st.cache_data(ttl=30)
 def benchmark(policy_id: str = "cdte_balanced_device_quality") -> dict[str, Any] | None:
     suffix = "" if policy_id == "cdte_balanced_device_quality" else f"_{policy_id}"
