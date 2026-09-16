@@ -270,6 +270,28 @@ sensitive to their own numerics.** Differences below ~0.01 in these curves are
 not real, and a champion condition needs replication before it is believed.
 Round for display, never before a decision.
 
+### 5.6 An earlier version shipped fabricated data labelled as published
+
+The predecessor of this repository carried a 25-row hydride dataset whose header
+read "taken directly from the published paper". Three of those compounds —
+YbCeTcH6, LiTiH6Ru and Ta3VH8 — appear nowhere in that paper. Their λ, ω_log and
+Tc values were invented and presented as published measurements.
+
+Two things made it findable. The first was counting: the paper's Tables 1 and 2
+hold 18 and 4 rows, and the file had 20 and 5. The second was refusing to trust a
+summarizer — two passes of an HTML-summarizing tool over the same URL returned
+three different row counts, so the tables were fetched and parsed directly
+instead.
+
+This is the strongest argument for §4.4. A fabricated row is indistinguishable
+from a transcribed one once they share a file, and the header comment asserting
+provenance is exactly the kind of claim nobody re-checks. Keeping published
+values in their own file, computing everything else, and testing that no score
+column can appear in the published dataset is what makes this class of error
+visible instead of permanent.
+
+---
+
 ---
 
 ## 6. Benchmark methodology

@@ -43,6 +43,7 @@ the sense that the system looked correct while being wrong.
 
 **Portfolio materials:** [deck](docs/deck/ai_to_lab_orchestrator.pdf) ·
 [architecture](docs/architecture.md) · [demo script](docs/demo_script.md) ·
+[research notes](docs/references.md) ·
 [bench-review prototype](docs/mockups/bench_review.html)
 
 ---
