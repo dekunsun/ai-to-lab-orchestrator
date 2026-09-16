@@ -50,6 +50,16 @@ never executes an experiment, and owns no workflow logic — `orchestrator/`,
 `policy/` and `triage/` all run headless without importing Streamlit, and a
 check in CI-able form asserts it.
 
+### Rebuild the deck
+
+```bash
+node docs/deck/build_deck.js
+```
+
+`docs/deck/ai_to_lab_orchestrator.pptx` reads its figures straight from
+`artifacts/`, so a re-run of the benchmark and a rebuild of the deck stay in
+agreement by construction. A PDF export sits beside it.
+
 ### Reproduce the benchmark
 
 ```bash
@@ -283,6 +293,8 @@ validation planning on top of them.
 - [x] **Phase 4** — governance surfaced: safety verdicts, failure taxonomy and
       hypothesis registry in the Command Center
 - [x] **Phase 5a** — Streamlit dashboard, three views
-- [ ] **Phase 5b** — deck, demo video, "Why Me" bridge
+- [x] **Phase 5b** — portfolio deck (`docs/deck/`, 15 slides, rebuilt from the
+      benchmark and triage artifacts so it cannot drift from the code)
+- [ ] **Phase 5c** — demo video
 - [ ] **Evidence loop** — a completed validation should mark its hypothesis
       supported or contradicted and re-rank the cohort (see `docs/architecture.md` §8)

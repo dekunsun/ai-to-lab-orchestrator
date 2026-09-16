@@ -30,10 +30,18 @@ VIEWS = {
 
 
 def main() -> None:
+    # Deep-linkable views: ?view=Hydride+Triage opens straight to that tab, so a
+    # view can be shared or bookmarked rather than described ("click the third one").
+    names = list(VIEWS)
+    requested = st.query_params.get("view")
+    default = names.index(requested) if requested in names else 0
+
     with st.sidebar:
         st.title("AI-to-Lab Orchestrator")
         st.caption("A self-driving-lab orchestration prototype for materials discovery.")
-        choice = st.radio("View", list(VIEWS), label_visibility="collapsed")
+        choice = st.radio("View", names, index=default, label_visibility="collapsed")
+    if choice != requested:
+        st.query_params["view"] = choice
         st.divider()
         st.markdown("**Scientific modeling scope**")
         st.caption(
