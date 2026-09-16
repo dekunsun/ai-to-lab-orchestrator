@@ -51,8 +51,8 @@ swapped — on its own.
 | Data contracts | If a device changes its output shape, do we find out? | Partial — structured dicts + policy validation, no Pydantic |
 | Orchestration | How does an intent become an auditable sequence of steps? | Done (synchronous) |
 | Experiment data | What is the system's memory? Do failures count as data? | Partial — 3 of 8 planned tables |
-| Decision | What next, and by whose definition of "good"? | Done for CdTe; hydride triage not started |
-| Governance | Who approved this, and which data may train a model? | Safety gate done; hypothesis registry not started |
+| Decision | What next, and by whose definition of "good"? | Done — CdTe optimization and hydride triage share one policy mechanism |
+| Governance | Who approved this, and which data may train a model? | Safety gate and hypothesis registry done; data-quality view not started |
 
 ---
 
@@ -143,7 +143,25 @@ Invariants the module enforces:
 The same mechanism is what hydride triage will use, so both halves of the
 project make trade-offs the same auditable way.
 
-### 4.4 The optimizer sits behind a swappable interface
+### 4.4 Provenance is a file boundary, not a convention
+
+The hydride dataset holds only what the paper printed. Every quantity the
+ranking needs beyond that — confidence, feasibility, information value — is
+computed by `triage/derive.py` or read from an auditable rule table, never
+stored alongside the published values.
+
+This matters because the failure mode is silent. Once an analyst's feasibility
+estimate sits in the same CSV column family as a published λ, nothing
+downstream can tell them apart, and six months later nobody remembers which
+was which. Keeping the boundary physical makes the distinction survive
+handoff — and a test (`test_published_csv_carries_no_scores`) fails if a score
+column ever appears in the published file.
+
+The tiers: **published** (transcribed), **derived** (documented transform of
+published values), **analyst** (judgment encoded as a versioned rule set). The
+third is the one most systems hide.
+
+### 4.5 The optimizer sits behind a swappable interface
 
 `suggest(history) -> params` is the whole contract. Two implementations:
 `RandomSearch` (honest baseline) and `BayesianOptimizer` (GP + Expected
@@ -154,7 +172,7 @@ project's purpose is to *explain* a closed loop, and a black box cannot be
 explained. It also paid off directly — see §5.1. In production, Ax or Optuna
 drops in behind the same interface without the orchestrator noticing.
 
-### 4.5 Governance must be able to say no
+### 4.6 Governance must be able to say no
 
 A guardrail that only annotates is decoration. Hazard rules carry an explicit
 `action`: `block` stops the experiment before any device runs; `flag` records
@@ -255,6 +273,8 @@ Scope discipline is part of the argument, so the omissions are explicit.
 | A physically accurate CdTe simulator | Would require real process data. The surrogate is honest about being a benchmark environment; a fake physics model would be worse than none. |
 | Simulated DFPT / electron-phonon / Tc for hydrides | Same reason. Phase 3 uses *published* values and builds triage on top. |
 | A graphene tactile-sensor use case | No grounded response model available. Two defensible use cases beat three thin ones. |
+| Hydride synthesis devices | There is no honest way to simulate a hydrogenation anneal here. The generated validation plan is parsed and safety-reviewed, then stops at `awaiting_device_implementation` — the seam sits where a real lab's seam sits. |
+| A "correct" hydride ranking | The paper publishes no scores. Presenting one ranking as the answer would manufacture authority the data does not carry; the sensitivity view and consensus shortlist are the honest output. |
 | A real async task queue (Celery / Kafka) | The state machine concept is what matters; the infrastructure would add operational surface without strengthening the argument. Maps cleanly to a task queue in production. |
 | Pydantic everywhere | Structured dicts plus validation at the boundaries that matter. Full contract enforcement is worth it in production, not at prototype scale. |
 
@@ -264,18 +284,17 @@ Scope discipline is part of the argument, so the omissions are explicit.
 
 Honest current state, in rough priority order:
 
-1. **CdTe and hydride triage are not connected.** Today they would be two
-   independent modules in one repo. The intended flow — triage ranks candidates
-   → validation plan generates a workflow → the same executor runs it →
-   evidence updates confidence and re-ranks — is what makes this an
-   *orchestrator* rather than two demos. This is the most important remaining work.
-2. **Five of eight planned tables are missing**: `measurements`, `failures`,
-   `safety_reviews`, `model_feedback`, `hypotheses`. Their content currently
-   lives inside JSON columns, which limits what a governance view can query.
-3. **No hypothesis registry.** This is the difference between "I ran
-   experiments" and "I built a system that tracks hypotheses, evidence, and
-   decisions" — high narrative value, low build cost.
-4. **Execution is synchronous.** Fine for a benchmark; the `queued/running`
+1. **No evidence loop back into triage.** Triage now feeds the executor, but
+   nothing feeds back: a completed validation should mark its hypothesis
+   supported or contradicted and update that candidate's confidence, re-ranking
+   the cohort. The forward path exists; the return path does not.
+2. **Four planned tables are still missing**: `measurements`, `failures`,
+   `safety_reviews`, `model_feedback`. Their content lives inside JSON columns,
+   which limits what a governance view can query.
+3. **Execution is synchronous.** Fine for a benchmark; the `queued/running`
    states in the state-machine story are not yet real.
-5. **No dashboard.** Nothing can currently be shown to a non-technical reviewer
-   without reading code.
+4. **No dashboard.** Only the Bench Review prototype in `docs/mockups/` exists;
+   nothing can currently be shown to a non-technical reviewer without reading code.
+5. **The hydride transcription came from the preprint HTML**, not the published
+   PDF, and the refined-Tc figure for LiZrH6Ru is reported four different ways in
+   the paper. See `datasets/hydrides/SOURCE.md` before quoting it.

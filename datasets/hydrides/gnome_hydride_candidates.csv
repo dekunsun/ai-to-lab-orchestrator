@@ -1,0 +1,23 @@
+candidate_id,mat_id,formula,structure_family,source_table,lambda_ep,omega_log_k,tc_allen_dynes_k,tc_refined_k,tc_refined_method,notes
+HYD-001,a1c4087396,EuDyReH6,vacancy_ordered_double_perovskite,table_1,2.05,35.84,4.9,,,
+HYD-002,2523d9ecde,NdEuTcH6,vacancy_ordered_double_perovskite,table_1,0.66,166.66,5.1,,,
+HYD-003,1243cdd0e1,Ce2HRh6,vacancy_ordered_double_perovskite,table_1,0.67,167.00,5.1,,,
+HYD-004,97ff896f6f,SmEuTcH6,vacancy_ordered_double_perovskite,table_1,0.67,168.28,5.3,,,
+HYD-005,0eddd1b470,EuCdFeH6,vacancy_ordered_double_perovskite,table_1,0.47,502.93,5.4,,,highest omega_log in the set
+HYD-006,cc52a3846d,EuYTcH6,vacancy_ordered_double_perovskite,table_1,0.67,179.97,5.6,,,
+HYD-007,e5427bdb32,TbEuTcH6,vacancy_ordered_double_perovskite,table_1,0.73,168.49,6.3,,,
+HYD-008,84f266aecd,EuDyTcH6,vacancy_ordered_double_perovskite,table_1,0.74,166.47,6.5,,,
+HYD-009,9248b5ab15,EuHoTcH6,vacancy_ordered_double_perovskite,table_1,0.77,163.21,6.9,,,
+HYD-010,4bb5b78a22,SmEuReH6,vacancy_ordered_double_perovskite,table_1,0.98,105.75,6.9,,,
+HYD-011,68f1be98a3,LiCeMnH6,vacancy_ordered_double_perovskite,table_1,0.65,234.44,6.9,,,
+HYD-012,5e1177e128,EuErTcH6,vacancy_ordered_double_perovskite,table_1,0.81,160.52,7.6,,,
+HYD-013,8d4721d779,EuYReH6,vacancy_ordered_double_perovskite,table_1,1.28,84.82,7.7,,,
+HYD-014,f68afdcbbc,EuTmTcH6,vacancy_ordered_double_perovskite,table_1,0.88,155.98,8.4,,,
+HYD-015,1bd4b03f35,YbGdTcH6,vacancy_ordered_double_perovskite,table_1,1.00,144.04,9.6,,,
+HYD-016,e5c2a73dc0,EuLuTcH6,vacancy_ordered_double_perovskite,table_1,1.09,134.38,10.1,,,
+HYD-017,51a97ab68d,EuCdH6Ru,vacancy_ordered_double_perovskite,table_1,2.53,84.40,13.6,,,strongest electron-phonon coupling in the set
+HYD-018,0f97a7734c,LiZrH6Ru,vacancy_ordered_double_perovskite,table_1,1.00,341.59,23.5,17.0,multiband_eliashberg_ab_initio_coulomb,paper headline candidate; authors also report 30.7 K harmonic and 32.0 K SSCHA and a 14.2 K Eliashberg estimate - see SOURCE.md
+HYD-019,149cfed18b,Ta3NbH8,fluorite_like,table_2,0.63,190.37,5.0,,,
+HYD-020,34fc41965b,TaNb3H8,fluorite_like,table_2,0.72,185.95,7.0,,,
+HYD-021,140fb04a4b,Ta6NbH16,fluorite_like,table_2,0.64,179.61,5.0,,,
+HYD-022,d93c6d6bda,Ta6MoH16,fluorite_like,table_2,0.75,176.75,7.3,,,

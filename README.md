@@ -38,7 +38,7 @@ review, data-quality, model-feedback eligibility) is persisted to `db/lab.sqlite
 
 ```bash
 ./.venv/bin/python scripts/run_cdte_benchmark.py --seeds 30 --budget 30
-./.venv/bin/python -m pytest tests/ -q          # 20 tests
+./.venv/bin/python -m pytest tests/ -q          # 47 tests
 ```
 
 ---
@@ -113,13 +113,87 @@ auditable way.
 
 ---
 
+## Hydride candidate triage: published data, explicit judgment
+
+The second use case ranks 22 ambient-pressure hydride superconductor candidates
+and turns the winner into an executable validation plan.
+
+```bash
+./.venv/bin/python scripts/run_hydride_triage.py
+./.venv/bin/python scripts/run_hydride_triage.py --policy configs/policies/hydride_lab_feasible_first.yaml
+```
+
+**No physics is simulated here.** `datasets/hydrides/gnome_hydride_candidates.csv`
+is a verbatim transcription of Tables 1 and 2 of [Sanna et al., *Communications
+Physics* (2026)](https://www.nature.com/articles/s42005-026-02552-4) — λ, ω_log
+and Allen–Dynes Tc for 18 vacancy-ordered double perovskites and 4 fluorite-like
+hydrides. Provenance is enforced as a *file* boundary, and a test fails if it
+erodes:
+
+| Tier | Where it lives | Example |
+|---|---|---|
+| **Published** | `datasets/hydrides/` | λ = 1.00, ω_log = 341.59 K, Tc_AD = 23.5 K |
+| **Derived** | `triage/derive.py` | Tc confidence, from coupling regime + refinement status |
+| **Analyst judgment** | `configs/triage/element_feasibility.yaml` | synthesis feasibility, from elemental constraints |
+
+The paper published no score, weight, confidence or feasibility value, so none
+is presented as though it had. Full detail in [datasets/hydrides/SOURCE.md](datasets/hydrides/SOURCE.md).
+
+### What the triage actually surfaces
+
+| Candidate | Balanced | High-Tc | Lab-feasible | Verdict |
+|---|---:|---:|---:|---|
+| LiZrH₆Ru | 1 | 1 | 1 | stable — leads under every policy |
+| Ta₆MoH₁₆ | 2 | 3 | 2 | stable |
+| TaNb₃H₈ | 3 | 4 | 3 | stable |
+| EuCdH₆Ru | 6 | **2** | **9** | policy-driven |
+| EuLuTcH₆ | 13 | **5** | 14 | policy-driven |
+
+Three findings the ranking exists to produce:
+
+1. **Ten of the 22 candidates contain technetium**, which has no stable isotope.
+   That is a hard constraint on the whole cohort, visible from the formula alone
+   and invisible in any Tc-ordered list. Feasibility is combined as a *minimum*,
+   not a mean — one disqualifying element is not offset by three convenient ones.
+2. **Only one candidate has been refined beyond Allen–Dynes.** For LiZrH₆Ru the
+   careful treatment moved 23.5 K → 17 K, which the authors call "an uncommon
+   deviation". The other 21 rankings rest on a number the paper's own authors
+   caution against over-reading, so confidence is weighted separately from Tc.
+3. **The consensus shortlist is the useful output**, not rank 1. LiZrH₆Ru,
+   Ta₆MoH₁₆ and TaNb₃H₈ sit in the top five under *every* policy — they are what
+   you validate regardless of whose priorities win the argument. EuCdH₆Ru moving
+   2 → 9 is the honest warning label on the rest.
+
+### Triage is an entry point into the loop, not a separate module
+
+The selected candidate becomes a workflow that goes through the **same** parser
+and the **same** safety gate as a CdTe experiment, with no orchestrator changes:
+
+```
+ranked shortlist → validation plan (generated YAML) → orchestrator.workflow_parser
+                 → safety_gate → hypothesis registered in db/lab.sqlite
+```
+
+The generated hydride workflow declares its own hazard rules, and the CdTe gate
+blocks them correctly on first sight — 750 °C with 150 bar H₂ is refused as
+`hydrogen_pressure_at_temperature`, though both values are individually in
+bounds. `tests/test_hydride_triage.py` guards this; if it ever fails, the
+project has gone back to being two demos in one repository.
+
+The plan stops at `awaiting_device_implementation`. There are no hydride
+synthesis devices here and none will be fabricated — that seam is where a real
+lab's seam is.
+
+---
+
 ## Architecture (4 layers)
 
 1. **Orchestration** — `orchestrator/`: YAML parser, safety gate, executor.
 2. **Data** — `db/`: SQLite store (experiments / steps / artifacts).
 3. **Decision** — `optimizer/`: transparent GP + Expected-Improvement BO, random
    baseline, soft failure-avoidance + an escape hatch for infeasible regions.
-   `policy/`: configurable weighted objectives, shared with hydride triage.
+   `policy/`: configurable weighted objectives. `triage/`: hydride candidate
+   ranking, sensitivity analysis and validation-plan generation.
 4. **Devices** — `devices/cdte/`: surrogate landscape + 6 virtual instruments.
 
 Full design rationale, including the trade-offs I chose *against*, is in
@@ -177,8 +251,9 @@ The CdTe module is a literature-*inspired* noisy surrogate **benchmark
 environment** used to test orchestration, metadata capture, failure handling,
 and closed-loop optimization. It makes no claim about true PCE prediction.
 
-(Phase 3 will add hydride candidate triage driven by **published** computational
-data — explicitly no fake DFPT/Tc simulation.)
+The hydride module does not simulate DFPT, electron–phonon coupling or Tc at
+all. It uses published values as input and builds triage, decision policy and
+validation planning on top of them.
 
 ---
 
@@ -188,6 +263,7 @@ data — explicitly no fake DFPT/Tc simulation.)
 - [x] **Phase 2** — robust benchmark: 30 seeds, BO vs random, median/IQR curves,
       failure-aware metrics, reproducible from a script
 - [x] **Phase 2.5** — decision policies extracted from code into `configs/policies/`
-- [ ] **Phase 3** — hydride triage from published paper data (reusing `policy/`)
-- [ ] **Phase 4** — governance: hypothesis registry, data-quality view, failure taxonomy
+- [x] **Phase 3** — hydride triage from published paper data, wired into the loop
+- [ ] **Phase 4** — governance: data-quality view, failure taxonomy (hypothesis
+      registry landed with Phase 3)
 - [ ] **Phase 5** — dashboard, deck, demo video; optional LLM-to-YAML

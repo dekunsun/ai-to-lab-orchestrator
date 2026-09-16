@@ -1,0 +1,13 @@
+policy_id: hydride_balanced_validation
+name: Balanced validation
+applies_to: hydrides
+description: >
+  Default triage policy. Weights predicted Tc most heavily but requires the
+  estimate to be trustworthy and the compound to be makeable, so the shortlist
+  is one a lab could actually start on this quarter.
+
+weights:
+  tc_score: 0.35
+  synthesis_feasibility: 0.30
+  tc_confidence: 0.25
+  information_value: 0.10

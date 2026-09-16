@@ -1,0 +1,14 @@
+policy_id: hydride_high_tc_seeking
+name: High-Tc seeking
+applies_to: hydrides
+description: >
+  Aggressive policy for a group whose goal is the ceiling rather than a result
+  this year. Accepts weak estimates and difficult synthesis in exchange for
+  chasing the highest predicted transition temperature. Expect a shortlist that
+  is largely un-makeable in an ordinary lab.
+
+weights:
+  tc_score: 0.60
+  tc_confidence: 0.15
+  synthesis_feasibility: 0.15
+  information_value: 0.10

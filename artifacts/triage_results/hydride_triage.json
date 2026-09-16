@@ -1,0 +1,1252 @@
+{
+  "generated_at": "2026-09-16T20:41:09+00:00",
+  "dataset": "datasets/hydrides/gnome_hydride_candidates.csv",
+  "policy": {
+    "policy_id": "hydride_balanced_validation",
+    "policy_name": "Balanced validation",
+    "weights": {
+      "tc_score": 0.35,
+      "synthesis_feasibility": 0.3,
+      "tc_confidence": 0.25,
+      "information_value": 0.1
+    }
+  },
+  "n_candidates": 22,
+  "n_with_refined_tc": 1,
+  "ranking": [
+    {
+      "rank": 1,
+      "candidate_id": "HYD-018",
+      "formula": "LiZrH6Ru",
+      "score": 0.7725,
+      "contributions": {
+        "tc_score": 0.35,
+        "synthesis_feasibility": 0.21,
+        "tc_confidence": 0.1875,
+        "information_value": 0.025
+      },
+      "metrics": {
+        "tc_score": 1.0,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.7,
+        "information_value": 0.25
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 17.0,
+          "method": "refined",
+          "allen_dynes_k": 23.5,
+          "delta_vs_allen_dynes": -6.5
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "1.0 \u2264 \u03bb < 1.5 \u2014 moderate coupling, outside the best-validated range; a beyond-Allen-Dynes calculation exists"
+        },
+        "feasibility": {
+          "score": 0.7,
+          "limiting_element": "Ru",
+          "reason": "platinum-group metal; cost constrains batch size",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "candidate_id": "HYD-022",
+      "formula": "Ta6MoH16",
+      "score": 0.6035,
+      "contributions": {
+        "tc_score": 0.1503,
+        "synthesis_feasibility": 0.255,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0107
+      },
+      "metrics": {
+        "tc_score": 0.4294,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.85,
+        "information_value": 0.1074
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 7.3,
+          "method": "allen_dynes",
+          "allen_dynes_k": 7.3,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.85,
+          "limiting_element": "Ta",
+          "reason": "refractory, but arc-melting and hydriding are established",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 3,
+      "candidate_id": "HYD-020",
+      "formula": "TaNb3H8",
+      "score": 0.5969,
+      "contributions": {
+        "tc_score": 0.1441,
+        "synthesis_feasibility": 0.255,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0103
+      },
+      "metrics": {
+        "tc_score": 0.4118,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.85,
+        "information_value": 0.1029
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 7.0,
+          "method": "allen_dynes",
+          "allen_dynes_k": 7.0,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.85,
+          "limiting_element": "Ta",
+          "reason": "refractory, but arc-melting and hydriding are established",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "candidate_id": "HYD-019",
+      "formula": "Ta3NbH8",
+      "score": 0.5528,
+      "contributions": {
+        "tc_score": 0.1029,
+        "synthesis_feasibility": 0.255,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0073
+      },
+      "metrics": {
+        "tc_score": 0.2941,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.85,
+        "information_value": 0.0735
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.0,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.0,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.85,
+          "limiting_element": "Ta",
+          "reason": "refractory, but arc-melting and hydriding are established",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "candidate_id": "HYD-021",
+      "formula": "Ta6NbH16",
+      "score": 0.5528,
+      "contributions": {
+        "tc_score": 0.1029,
+        "synthesis_feasibility": 0.255,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0073
+      },
+      "metrics": {
+        "tc_score": 0.2941,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.85,
+        "information_value": 0.0735
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.0,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.0,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.85,
+          "limiting_element": "Ta",
+          "reason": "refractory, but arc-melting and hydriding are established",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "candidate_id": "HYD-017",
+      "formula": "EuCdH6Ru",
+      "score": 0.546,
+      "contributions": {
+        "tc_score": 0.28,
+        "synthesis_feasibility": 0.135,
+        "tc_confidence": 0.075,
+        "information_value": 0.056
+      },
+      "metrics": {
+        "tc_score": 0.8,
+        "tc_confidence": 0.3,
+        "synthesis_feasibility": 0.45,
+        "information_value": 0.56
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 13.6,
+          "method": "allen_dynes",
+          "allen_dynes_k": 13.6,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.3,
+          "rationale": "\u03bb \u2265 1.5 \u2014 strong coupling, where Allen-Dynes is least reliable; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.45,
+          "limiting_element": "Cd",
+          "reason": "toxic and volatile at synthesis temperatures; containment required",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 7,
+      "candidate_id": "HYD-011",
+      "formula": "LiCeMnH6",
+      "score": 0.5347,
+      "contributions": {
+        "tc_score": 0.1421,
+        "synthesis_feasibility": 0.195,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0102
+      },
+      "metrics": {
+        "tc_score": 0.4059,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.65,
+        "information_value": 0.1015
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 6.9,
+          "method": "allen_dynes",
+          "allen_dynes_k": 6.9,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.65,
+          "limiting_element": "Ce",
+          "reason": "rare earth, pyrophoric when finely divided; glovebox handling",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 8,
+      "candidate_id": "HYD-010",
+      "formula": "SmEuReH6",
+      "score": 0.5047,
+      "contributions": {
+        "tc_score": 0.1421,
+        "synthesis_feasibility": 0.165,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0102
+      },
+      "metrics": {
+        "tc_score": 0.4059,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.55,
+        "information_value": 0.1015
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 6.9,
+          "method": "allen_dynes",
+          "allen_dynes_k": 6.9,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.55,
+          "limiting_element": "Re",
+          "reason": "melts at 3186 C and is among the most expensive stable metals",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 9,
+      "candidate_id": "HYD-003",
+      "formula": "Ce2HRh6",
+      "score": 0.495,
+      "contributions": {
+        "tc_score": 0.105,
+        "synthesis_feasibility": 0.195,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0075
+      },
+      "metrics": {
+        "tc_score": 0.3,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.65,
+        "information_value": 0.075
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.1,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.1,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.65,
+          "limiting_element": "Ce",
+          "reason": "rare earth, pyrophoric when finely divided; glovebox handling",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 10,
+      "candidate_id": "HYD-013",
+      "formula": "EuYReH6",
+      "score": 0.4814,
+      "contributions": {
+        "tc_score": 0.1585,
+        "synthesis_feasibility": 0.165,
+        "tc_confidence": 0.1375,
+        "information_value": 0.0204
+      },
+      "metrics": {
+        "tc_score": 0.4529,
+        "tc_confidence": 0.55,
+        "synthesis_feasibility": 0.55,
+        "information_value": 0.2038
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 7.7,
+          "method": "allen_dynes",
+          "allen_dynes_k": 7.7,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.55,
+          "rationale": "1.0 \u2264 \u03bb < 1.5 \u2014 moderate coupling, outside the best-validated range; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.55,
+          "limiting_element": "Re",
+          "reason": "melts at 3186 C and is among the most expensive stable metals",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 11,
+      "candidate_id": "HYD-005",
+      "formula": "EuCdFeH6",
+      "score": 0.4416,
+      "contributions": {
+        "tc_score": 0.1112,
+        "synthesis_feasibility": 0.135,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0079
+      },
+      "metrics": {
+        "tc_score": 0.3176,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.45,
+        "information_value": 0.0794
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.4,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.4,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.45,
+          "limiting_element": "Cd",
+          "reason": "toxic and volatile at synthesis temperatures; containment required",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 12,
+      "candidate_id": "HYD-014",
+      "formula": "EuTmTcH6",
+      "score": 0.3878,
+      "contributions": {
+        "tc_score": 0.1729,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0123
+      },
+      "metrics": {
+        "tc_score": 0.4941,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.1235
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 8.4,
+          "method": "allen_dynes",
+          "allen_dynes_k": 8.4,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 13,
+      "candidate_id": "HYD-016",
+      "formula": "EuLuTcH6",
+      "score": 0.3872,
+      "contributions": {
+        "tc_score": 0.2079,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1375,
+        "information_value": 0.0267
+      },
+      "metrics": {
+        "tc_score": 0.5941,
+        "tc_confidence": 0.55,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.2673
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 10.1,
+          "method": "allen_dynes",
+          "allen_dynes_k": 10.1,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.55,
+          "rationale": "1.0 \u2264 \u03bb < 1.5 \u2014 moderate coupling, outside the best-validated range; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 14,
+      "candidate_id": "HYD-015",
+      "formula": "YbGdTcH6",
+      "score": 0.3756,
+      "contributions": {
+        "tc_score": 0.1976,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1375,
+        "information_value": 0.0254
+      },
+      "metrics": {
+        "tc_score": 0.5647,
+        "tc_confidence": 0.55,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.2541
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 9.6,
+          "method": "allen_dynes",
+          "allen_dynes_k": 9.6,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.55,
+          "rationale": "1.0 \u2264 \u03bb < 1.5 \u2014 moderate coupling, outside the best-validated range; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 15,
+      "candidate_id": "HYD-012",
+      "formula": "EuErTcH6",
+      "score": 0.3702,
+      "contributions": {
+        "tc_score": 0.1565,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0112
+      },
+      "metrics": {
+        "tc_score": 0.4471,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.1118
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 7.6,
+          "method": "allen_dynes",
+          "allen_dynes_k": 7.6,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 16,
+      "candidate_id": "HYD-001",
+      "formula": "EuDyReH6",
+      "score": 0.361,
+      "contributions": {
+        "tc_score": 0.1009,
+        "synthesis_feasibility": 0.165,
+        "tc_confidence": 0.075,
+        "information_value": 0.0202
+      },
+      "metrics": {
+        "tc_score": 0.2882,
+        "tc_confidence": 0.3,
+        "synthesis_feasibility": 0.55,
+        "information_value": 0.2017
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 4.9,
+          "method": "allen_dynes",
+          "allen_dynes_k": 4.9,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.3,
+          "rationale": "\u03bb \u2265 1.5 \u2014 strong coupling, where Allen-Dynes is least reliable; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.55,
+          "limiting_element": "Re",
+          "reason": "melts at 3186 C and is among the most expensive stable metals",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 17,
+      "candidate_id": "HYD-009",
+      "formula": "EuHoTcH6",
+      "score": 0.3547,
+      "contributions": {
+        "tc_score": 0.1421,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0102
+      },
+      "metrics": {
+        "tc_score": 0.4059,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.1015
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 6.9,
+          "method": "allen_dynes",
+          "allen_dynes_k": 6.9,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 18,
+      "candidate_id": "HYD-008",
+      "formula": "EuDyTcH6",
+      "score": 0.3459,
+      "contributions": {
+        "tc_score": 0.1338,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0096
+      },
+      "metrics": {
+        "tc_score": 0.3824,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.0956
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 6.5,
+          "method": "allen_dynes",
+          "allen_dynes_k": 6.5,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 19,
+      "candidate_id": "HYD-007",
+      "formula": "TbEuTcH6",
+      "score": 0.3415,
+      "contributions": {
+        "tc_score": 0.1297,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0093
+      },
+      "metrics": {
+        "tc_score": 0.3706,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.0926
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 6.3,
+          "method": "allen_dynes",
+          "allen_dynes_k": 6.3,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 20,
+      "candidate_id": "HYD-006",
+      "formula": "EuYTcH6",
+      "score": 0.326,
+      "contributions": {
+        "tc_score": 0.1153,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0082
+      },
+      "metrics": {
+        "tc_score": 0.3294,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.0824
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.6,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.6,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 21,
+      "candidate_id": "HYD-004",
+      "formula": "SmEuTcH6",
+      "score": 0.3194,
+      "contributions": {
+        "tc_score": 0.1091,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0078
+      },
+      "metrics": {
+        "tc_score": 0.3118,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.078
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.3,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.3,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    },
+    {
+      "rank": 22,
+      "candidate_id": "HYD-002",
+      "formula": "NdEuTcH6",
+      "score": 0.315,
+      "contributions": {
+        "tc_score": 0.105,
+        "synthesis_feasibility": 0.015,
+        "tc_confidence": 0.1875,
+        "information_value": 0.0075
+      },
+      "metrics": {
+        "tc_score": 0.3,
+        "tc_confidence": 0.75,
+        "synthesis_feasibility": 0.05,
+        "information_value": 0.075
+      },
+      "derivation": {
+        "tc": {
+          "value_k": 5.1,
+          "method": "allen_dynes",
+          "allen_dynes_k": 5.1,
+          "delta_vs_allen_dynes": null
+        },
+        "confidence": {
+          "score": 0.75,
+          "rationale": "\u03bb < 1.0 \u2014 the regime Allen-Dynes was calibrated on; Allen-Dynes only, not independently refined"
+        },
+        "feasibility": {
+          "score": 0.05,
+          "limiting_element": "Tc",
+          "reason": "technetium has no stable isotope; radioactive, requires a licensed facility",
+          "rule_set_id": "element_feasibility_v1"
+        },
+        "tc_normalized_against_k": 17.0,
+        "provenance": {
+          "tc_score": "derived from published Tc",
+          "tc_confidence": "derived from published \u03bb + refinement status",
+          "synthesis_feasibility": "analyst rule set element_feasibility_v1",
+          "information_value": "derived from tc_score and tc_confidence"
+        }
+      }
+    }
+  ],
+  "sensitivity": [
+    {
+      "candidate_id": "HYD-018",
+      "formula": "LiZrH6Ru",
+      "ranks": {
+        "hydride_balanced_validation": 1,
+        "hydride_high_tc_seeking": 1,
+        "hydride_lab_feasible_first": 1
+      },
+      "best_rank": 1,
+      "rank_spread": 0,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-022",
+      "formula": "Ta6MoH16",
+      "ranks": {
+        "hydride_balanced_validation": 2,
+        "hydride_high_tc_seeking": 3,
+        "hydride_lab_feasible_first": 2
+      },
+      "best_rank": 2,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-017",
+      "formula": "EuCdH6Ru",
+      "ranks": {
+        "hydride_balanced_validation": 6,
+        "hydride_high_tc_seeking": 2,
+        "hydride_lab_feasible_first": 9
+      },
+      "best_rank": 2,
+      "rank_spread": 7,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-020",
+      "formula": "TaNb3H8",
+      "ranks": {
+        "hydride_balanced_validation": 3,
+        "hydride_high_tc_seeking": 4,
+        "hydride_lab_feasible_first": 3
+      },
+      "best_rank": 3,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-019",
+      "formula": "Ta3NbH8",
+      "ranks": {
+        "hydride_balanced_validation": 4,
+        "hydride_high_tc_seeking": 11,
+        "hydride_lab_feasible_first": 4
+      },
+      "best_rank": 4,
+      "rank_spread": 7,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-021",
+      "formula": "Ta6NbH16",
+      "ranks": {
+        "hydride_balanced_validation": 5,
+        "hydride_high_tc_seeking": 12,
+        "hydride_lab_feasible_first": 5
+      },
+      "best_rank": 5,
+      "rank_spread": 7,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-016",
+      "formula": "EuLuTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 13,
+        "hydride_high_tc_seeking": 5,
+        "hydride_lab_feasible_first": 14
+      },
+      "best_rank": 5,
+      "rank_spread": 9,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-011",
+      "formula": "LiCeMnH6",
+      "ranks": {
+        "hydride_balanced_validation": 7,
+        "hydride_high_tc_seeking": 6,
+        "hydride_lab_feasible_first": 6
+      },
+      "best_rank": 6,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-013",
+      "formula": "EuYReH6",
+      "ranks": {
+        "hydride_balanced_validation": 10,
+        "hydride_high_tc_seeking": 7,
+        "hydride_lab_feasible_first": 10
+      },
+      "best_rank": 7,
+      "rank_spread": 3,
+      "stability": "moderate"
+    },
+    {
+      "candidate_id": "HYD-003",
+      "formula": "Ce2HRh6",
+      "ranks": {
+        "hydride_balanced_validation": 9,
+        "hydride_high_tc_seeking": 14,
+        "hydride_lab_feasible_first": 7
+      },
+      "best_rank": 7,
+      "rank_spread": 7,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-010",
+      "formula": "SmEuReH6",
+      "ranks": {
+        "hydride_balanced_validation": 8,
+        "hydride_high_tc_seeking": 9,
+        "hydride_lab_feasible_first": 8
+      },
+      "best_rank": 8,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-015",
+      "formula": "YbGdTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 14,
+        "hydride_high_tc_seeking": 8,
+        "hydride_lab_feasible_first": 16
+      },
+      "best_rank": 8,
+      "rank_spread": 8,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-014",
+      "formula": "EuTmTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 12,
+        "hydride_high_tc_seeking": 10,
+        "hydride_lab_feasible_first": 13
+      },
+      "best_rank": 10,
+      "rank_spread": 3,
+      "stability": "moderate"
+    },
+    {
+      "candidate_id": "HYD-005",
+      "formula": "EuCdFeH6",
+      "ranks": {
+        "hydride_balanced_validation": 11,
+        "hydride_high_tc_seeking": 15,
+        "hydride_lab_feasible_first": 11
+      },
+      "best_rank": 11,
+      "rank_spread": 4,
+      "stability": "moderate"
+    },
+    {
+      "candidate_id": "HYD-001",
+      "formula": "EuDyReH6",
+      "ranks": {
+        "hydride_balanced_validation": 16,
+        "hydride_high_tc_seeking": 20,
+        "hydride_lab_feasible_first": 12
+      },
+      "best_rank": 12,
+      "rank_spread": 8,
+      "stability": "policy-driven"
+    },
+    {
+      "candidate_id": "HYD-012",
+      "formula": "EuErTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 15,
+        "hydride_high_tc_seeking": 13,
+        "hydride_lab_feasible_first": 15
+      },
+      "best_rank": 13,
+      "rank_spread": 2,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-009",
+      "formula": "EuHoTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 17,
+        "hydride_high_tc_seeking": 16,
+        "hydride_lab_feasible_first": 17
+      },
+      "best_rank": 16,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-008",
+      "formula": "EuDyTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 18,
+        "hydride_high_tc_seeking": 17,
+        "hydride_lab_feasible_first": 18
+      },
+      "best_rank": 17,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-007",
+      "formula": "TbEuTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 19,
+        "hydride_high_tc_seeking": 18,
+        "hydride_lab_feasible_first": 19
+      },
+      "best_rank": 18,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-006",
+      "formula": "EuYTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 20,
+        "hydride_high_tc_seeking": 19,
+        "hydride_lab_feasible_first": 20
+      },
+      "best_rank": 19,
+      "rank_spread": 1,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-004",
+      "formula": "SmEuTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 21,
+        "hydride_high_tc_seeking": 21,
+        "hydride_lab_feasible_first": 21
+      },
+      "best_rank": 21,
+      "rank_spread": 0,
+      "stability": "stable"
+    },
+    {
+      "candidate_id": "HYD-002",
+      "formula": "NdEuTcH6",
+      "ranks": {
+        "hydride_balanced_validation": 22,
+        "hydride_high_tc_seeking": 22,
+        "hydride_lab_feasible_first": 22
+      },
+      "best_rank": 22,
+      "rank_spread": 0,
+      "stability": "stable"
+    }
+  ],
+  "consensus_shortlist": [
+    "LiZrH6Ru",
+    "Ta6MoH16",
+    "TaNb3H8"
+  ],
+  "validation_plan": "configs/workflows/generated/hydride_validation_lizrh6ru_v1.yaml",
+  "hypothesis": {
+    "hypothesis_id": "HYP-HYD-018",
+    "subject": "LiZrH6Ru",
+    "mat_id": "0f97a7734c",
+    "claim": "LiZrH6Ru superconducts near 17 K at ambient pressure, as estimated by multiband_eliashberg_ab_initio_coulomb.",
+    "what_this_settles": "Whether the refined estimate (17 K) or the Allen-Dynes value (23.5 K) is closer to measurement. The two disagree by 6.5 K.",
+    "status": "proposed",
+    "selected_by_policy": "hydride_balanced_validation",
+    "rank_under_policy": 1,
+    "negative_result_is_useful": true,
+    "why_negative_is_useful": "A measured Tc well below the prediction is direct evidence on where these estimates break down, and this cohort rests almost entirely on unrefined Allen-Dynes values \u2014 so the correction generalizes beyond this one compound.",
+    "known_caveats": [
+      "1.0 \u2264 \u03bb < 1.5 \u2014 moderate coupling, outside the best-validated range; a beyond-Allen-Dynes calculation exists",
+      "synthesis limited by Ru: platinum-group metal; cost constrains batch size"
+    ]
+  }
+}

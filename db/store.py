@@ -9,6 +9,7 @@ Later phases extend this with hypotheses, safety_reviews, model_feedback.
 from __future__ import annotations
 import json
 import sqlite3
+from datetime import datetime, timezone
 from typing import Any
 
 SCHEMA = """
@@ -37,6 +38,18 @@ CREATE TABLE IF NOT EXISTS workflow_steps (
     data_quality_score REAL,
     failure_category TEXT
 );
+CREATE TABLE IF NOT EXISTS hypotheses (
+    hypothesis_id TEXT PRIMARY KEY,
+    subject TEXT,                 -- what the hypothesis is about (e.g. a formula)
+    claim TEXT,
+    what_this_settles TEXT,
+    status TEXT,                  -- proposed / active / supported / contradicted / inconclusive
+    selected_by_policy TEXT,      -- which decision policy put it on the list
+    rank_under_policy INTEGER,
+    source TEXT,                  -- provenance of the underlying data
+    detail_json TEXT,
+    created_at TEXT
+);
 CREATE TABLE IF NOT EXISTS artifacts (
     artifact_pk INTEGER PRIMARY KEY AUTOINCREMENT,
     experiment_id TEXT,
@@ -45,6 +58,26 @@ CREATE TABLE IF NOT EXISTS artifacts (
     artifact_json TEXT
 );
 """
+
+
+def save_hypothesis(conn: sqlite3.Connection, hyp: dict[str, Any], source: str) -> None:
+    """Register a hypothesis as a first-class object.
+
+    This is what separates "I ran experiments" from "I built a system that
+    tracks what those experiments were supposed to settle". A triage decision
+    that produces only a ranked table leaves no record of the reasoning; one
+    that produces a hypothesis can later be marked supported or contradicted.
+    """
+    conn.execute(
+        """INSERT OR REPLACE INTO hypotheses
+           (hypothesis_id, subject, claim, what_this_settles, status,
+            selected_by_policy, rank_under_policy, source, detail_json, created_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?)""",
+        (hyp["hypothesis_id"], hyp["subject"], hyp["claim"], hyp["what_this_settles"],
+         hyp["status"], hyp.get("selected_by_policy"), hyp.get("rank_under_policy"),
+         source, json.dumps(hyp), datetime.now(timezone.utc).isoformat(timespec="seconds")),
+    )
+    conn.commit()
 
 
 def _migrate(conn: sqlite3.Connection) -> None:

@@ -1,0 +1,14 @@
+policy_id: hydride_lab_feasible_first
+name: Lab-feasible first
+applies_to: hydrides
+description: >
+  For an automated lab standing up its first hydride campaign. Prioritizes
+  compounds that can actually be synthesized and characterized, on the argument
+  that early campaigns are worth more for the clean data and working protocol
+  they produce than for the transition temperature they find.
+
+weights:
+  synthesis_feasibility: 0.50
+  tc_score: 0.20
+  tc_confidence: 0.20
+  information_value: 0.10

@@ -1,0 +1,59 @@
+# Elemental synthesis-feasibility rules for hydride candidate triage.
+#
+# THIS IS ANALYST JUDGMENT, NOT PUBLISHED DATA. The source paper does not rank
+# candidates by how hard they are to make. These scores encode ordinary
+# materials-lab constraints so that judgment is explicit, versioned and
+# arguable, instead of hiding inside a ranking function.
+#
+# A composite is the MINIMUM across a formula's elements, not an average:
+# feasibility is a weakest-link property. One radioactive constituent is not
+# offset by three convenient ones.
+#
+# Scale: 1.0 = routine in an ordinary inorganic lab. 0.0 = not attemptable.
+
+rule_set_id: element_feasibility_v1
+combine: min
+
+defaults:
+  score: 0.60
+  reason: "no specific constraint recorded; default applied"
+
+elements:
+  H:  {score: 1.00, reason: "hydrogen source is routine; not a limiting factor"}
+
+  # --- disqualifying ---
+  Tc: {score: 0.05, reason: "technetium has no stable isotope; radioactive, requires a licensed facility"}
+
+  # --- serious containment or cost burden ---
+  Cd: {score: 0.45, reason: "toxic and volatile at synthesis temperatures; containment required"}
+  Re: {score: 0.55, reason: "melts at 3186 C and is among the most expensive stable metals"}
+
+  # --- air and moisture sensitive: glovebox work ---
+  Eu: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Sm: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Nd: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Tb: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Dy: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Ho: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Er: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Tm: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Yb: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Lu: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Gd: {score: 0.65, reason: "rare earth, air and moisture sensitive; glovebox handling"}
+  Ce: {score: 0.65, reason: "rare earth, pyrophoric when finely divided; glovebox handling"}
+  Y:  {score: 0.65, reason: "reactive metal, oxidises readily; glovebox handling"}
+
+  # --- expensive but routine ---
+  Rh: {score: 0.70, reason: "platinum-group metal; cost constrains batch size"}
+  Ru: {score: 0.70, reason: "platinum-group metal; cost constrains batch size"}
+  Li: {score: 0.75, reason: "reactive with air and moisture; standard glovebox practice"}
+
+  # --- refractory but standard ---
+  Zr: {score: 0.85, reason: "established hydride chemistry; arc-melting routine"}
+  Ta: {score: 0.85, reason: "refractory, but arc-melting and hydriding are established"}
+  Nb: {score: 0.85, reason: "refractory, but arc-melting and hydriding are established"}
+  Mo: {score: 0.85, reason: "refractory, but arc-melting and hydriding are established"}
+
+  # --- unproblematic ---
+  Fe: {score: 0.90, reason: "abundant and routine to handle"}
+  Mn: {score: 0.90, reason: "abundant and routine to handle"}
