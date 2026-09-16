@@ -1,0 +1,468 @@
+<title>Bench Review Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --ground:#eef1f4; --panel:#ffffff; --panel-2:#f7f9fb;
+    --ink:#101820; --ink-2:#44545f; --muted:#687885;
+    --line:#d4dce3; --line-2:#e4eaef;
+    --accent:#1f5f8b; --accent-ink:#ffffff; --accent-soft:#e3edf5;
+    --hold:#c2410c; --hold-soft:#fdeee6; --hold-line:#f0c4ae;
+    --flag:#b45309; --flag-soft:#fdf3e3;
+    --pass:#15803d; --pass-soft:#e8f5ed;
+    --shadow:0 1px 2px rgba(16,24,32,.06), 0 8px 24px rgba(16,24,32,.06);
+    --radius:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#12171c; --panel:#1a2028; --panel-2:#202832;
+      --ink:#e6edf3; --ink-2:#b3c1cc; --muted:#8a9aa8;
+      --line:#2c3640; --line-2:#242d36;
+      --accent:#5ea9d8; --accent-ink:#0d1319; --accent-soft:#1c2c38;
+      --hold:#f97f4d; --hold-soft:#2c1a12; --hold-line:#5c3220;
+      --flag:#e0a33f; --flag-soft:#2a2113;
+      --pass:#4ec27c; --pass-soft:#14291d;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#12171c; --panel:#1a2028; --panel-2:#202832;
+    --ink:#e6edf3; --ink-2:#b3c1cc; --muted:#8a9aa8;
+    --line:#2c3640; --line-2:#242d36;
+    --accent:#5ea9d8; --accent-ink:#0d1319; --accent-soft:#1c2c38;
+    --hold:#f97f4d; --hold-soft:#2c1a12; --hold-line:#5c3220;
+    --flag:#e0a33f; --flag-soft:#2a2113;
+    --pass:#4ec27c; --pass-soft:#14291d;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+
+  [hidden]{display:none!important;}
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding-inline:16px; padding-block:0 32px;}
+  .mono{font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-variant-numeric:tabular-nums;}
+  .eyebrow{font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+           color:var(--muted);}
+
+  /* ---------- masthead + status rail ---------- */
+  .mast{display:flex; flex-wrap:wrap; gap:12px 20px; align-items:baseline;
+        padding-block:20px 14px;}
+  .mast h1{font-size:19px; font-weight:600; margin:0; letter-spacing:-.01em;}
+  .mast .sub{font-size:13px; color:var(--muted);}
+  .proto{margin-left:auto; font-size:10px; font-weight:600; letter-spacing:.1em;
+         padding:4px 9px; border:1px solid var(--line); border-radius:999px;
+         color:var(--muted); white-space:nowrap;}
+
+  .rail{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+        background:var(--line-2); border:1px solid var(--line); border-radius:var(--radius);
+        overflow:hidden; margin-bottom:22px;}
+  .rail div{background:var(--panel); padding:12px 16px;}
+  .rail .k{font-size:11px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+           color:var(--muted); margin-bottom:5px;}
+  .rail .v{font-size:17px; font-weight:600; letter-spacing:-.01em;}
+  .rail .v small{font-size:12px; font-weight:400; color:var(--muted); letter-spacing:0;}
+
+  /* ---------- the hold (hero) ---------- */
+  .hold{border:1px solid var(--hold-line); background:var(--panel); border-radius:var(--radius);
+        box-shadow:var(--shadow); overflow:hidden; margin-bottom:22px;}
+  .hold-head{display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center;
+             background:var(--hold-soft); border-bottom:1px solid var(--hold-line);
+             padding:14px 20px;}
+  .dot{width:9px; height:9px; border-radius:50%; background:var(--hold); flex:none;}
+  .hold-head strong{font-size:15px; font-weight:600; color:var(--hold);}
+  .hold-head .id{margin-left:auto; font-size:12px; color:var(--ink-2);}
+  .hold-body{padding:20px;}
+  .hold-why{font-size:15px; line-height:1.5; margin:0 0 4px; max-width:62ch;}
+  .hold-rule{font-size:12.5px; color:var(--ink-2); margin:0 0 20px;
+             padding:9px 12px; background:var(--panel-2); border-radius:7px;
+             border:1px solid var(--line-2); overflow-x:auto; white-space:nowrap;}
+
+  .params{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px;
+          margin-bottom:22px;}
+  .p{border:1px solid var(--line-2); border-radius:8px; padding:12px 14px; background:var(--panel-2);}
+  .p.trig{border-color:var(--hold-line); background:var(--hold-soft);}
+  .p .pn{font-size:11.5px; color:var(--muted); margin-bottom:6px;}
+  .p .pv{font-size:19px; font-weight:600; letter-spacing:-.01em;}
+  .p .pv em{font-style:normal; font-size:12px; font-weight:400; color:var(--muted);}
+  .track{height:5px; border-radius:3px; background:var(--line); margin:9px 0 5px; position:relative;}
+  .track i{position:absolute; top:-2px; width:3px; height:9px; border-radius:2px;
+           background:var(--ink-2);}
+  .p.trig .track i{background:var(--hold);}
+  .track b{position:absolute; top:0; height:5px; border-radius:3px; background:var(--hold);
+           opacity:.28;}
+  .bounds{display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted);}
+
+  .acts{display:flex; flex-wrap:wrap; gap:12px;}
+  .btn{flex:1 1 220px; min-height:60px; border-radius:9px; font-size:15px; font-weight:600;
+       font-family:inherit; cursor:pointer; padding:14px 20px; border:1px solid transparent;
+       display:flex; align-items:center; justify-content:center; gap:9px; text-align:center;}
+  .btn-primary{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+  .btn-ghost{background:var(--panel); color:var(--ink); border-color:var(--line);}
+  .btn:focus-visible{outline:3px solid var(--accent); outline-offset:2px;}
+  .btn:hover{filter:brightness(1.06);}
+  .note{font-size:12px; color:var(--muted); margin:14px 0 0;}
+
+  .resolved{padding:22px 20px; display:flex; flex-wrap:wrap; gap:14px; align-items:center;}
+  .resolved .tick{width:34px; height:34px; border-radius:50%; background:var(--pass-soft);
+                  color:var(--pass); display:flex; align-items:center; justify-content:center;
+                  font-size:17px; font-weight:700; flex:none;}
+  .resolved .rt{font-size:15px; font-weight:600;}
+  .resolved .rs{font-size:12.5px; color:var(--muted); margin-top:3px;}
+
+  /* ---------- lower grid ---------- */
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
+  @media (max-width:900px){ .cols{grid-template-columns:1fr;} }
+
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+        box-shadow:var(--shadow); overflow:hidden;}
+  .card-head{padding:13px 18px; border-bottom:1px solid var(--line-2);
+             display:flex; flex-wrap:wrap; gap:8px 12px; align-items:baseline;}
+  .card-head h2{font-size:13px; font-weight:600; margin:0; letter-spacing:.02em;}
+  .card-head .meta{margin-left:auto; font-size:11.5px; color:var(--muted);}
+  .card-body{padding:18px;}
+
+  .chip{font-size:10.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+        padding:3px 8px; border-radius:999px;}
+  .chip-pass{background:var(--pass-soft); color:var(--pass);}
+  .chip-flag{background:var(--flag-soft); color:var(--flag);}
+
+  .spec{display:flex; flex-wrap:wrap; gap:6px 14px; align-items:baseline; margin-bottom:6px;}
+  .spec .sl{font-size:12.5px; color:var(--ink-2);}
+  .spec .sv{margin-left:auto; font-size:13px; font-weight:600;}
+  .devbar{height:26px; border-radius:6px; background:var(--panel-2);
+          border:1px solid var(--line-2); position:relative; margin-bottom:8px;}
+  .devbar .band{position:absolute; top:0; bottom:0; background:var(--pass-soft);}
+  .devbar .mid{position:absolute; top:0; bottom:0; width:1px; background:var(--line);}
+  .devbar .act{position:absolute; top:4px; bottom:4px; width:3px; border-radius:2px;
+               background:var(--pass);}
+  .devscale{display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted);
+            margin-bottom:20px;}
+
+  .m{margin-bottom:13px;}
+  .m .mh{display:flex; gap:10px; align-items:baseline; margin-bottom:5px;}
+  .m .mn{font-size:12.5px; color:var(--ink-2);}
+  .m .mv{margin-left:auto; font-size:13px; font-weight:600;}
+  .mbar{height:7px; border-radius:4px; background:var(--line-2); overflow:hidden;}
+  .mbar span{display:block; height:100%; border-radius:4px; background:var(--accent);}
+
+  .stack{display:flex; height:34px; border-radius:7px; overflow:hidden; border:1px solid var(--line-2);
+         margin:4px 0 10px;}
+  .stack span{display:block;}
+  .legend{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:7px 14px;}
+  .legend div{display:flex; align-items:center; gap:7px; font-size:11.5px; color:var(--ink-2);}
+  .legend i{width:9px; height:9px; border-radius:2px; flex:none;}
+  .legend b{margin-left:auto; font-weight:600; color:var(--ink);}
+
+  .chart{margin-bottom:6px;}
+  .chart figcaption{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .chart svg{display:block; width:100%; height:auto; max-width:100%;}
+  .ax{font-family:"IBM Plex Mono", monospace; font-size:9px; fill:var(--muted);}
+  .axl{font-family:"IBM Plex Sans", sans-serif; font-size:10px; fill:var(--ink-2);}
+  hr.sep{border:0; border-top:1px solid var(--line-2); margin:20px 0;}
+
+  .log{margin-top:18px;}
+  .log ul{list-style:none; margin:0; padding:0; border:1px solid var(--line);
+          border-radius:var(--radius); overflow:hidden; background:var(--panel);}
+  .log li{display:flex; flex-wrap:wrap; gap:6px 14px; align-items:baseline;
+          padding:12px 18px; border-bottom:1px solid var(--line-2); font-size:13px;}
+  .log li:last-child{border-bottom:0;}
+  .log .t{font-size:11.5px; color:var(--muted); min-width:52px;}
+  .log .d{color:var(--ink-2);} .log .s{margin-left:auto; font-weight:600;}
+
+  footer{margin-top:26px; padding-top:16px; border-top:1px solid var(--line);
+         font-size:12px; color:var(--muted); line-height:1.6; max-width:78ch;}
+  @media (prefers-reduced-motion:reduce){ *{transition:none!important; animation:none!important;} }
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <h1>Bench Review</h1>
+    <span class="sub">CdTe absorber &middot; process optimization campaign</span>
+    <span class="proto">DESIGN PROTOTYPE</span>
+  </header>
+
+  <section class="rail" aria-label="Campaign status">
+    <div><div class="k">Experiment</div><div class="v mono">18 <small>/ 30 budget</small></div></div>
+    <div><div class="k">Best objective</div><div class="v mono">0.898</div></div>
+    <div><div class="k">Scoring policy</div><div class="v" style="font-size:14px">Balanced device quality</div></div>
+    <div><div class="k">Valid feedback</div><div class="v mono">85%</div></div>
+    <div><div class="k">Held by gate</div><div class="v mono" style="color:var(--hold)">1</div></div>
+  </section>
+
+  <!-- ============ HERO: the one thing needing a person ============ -->
+  <section class="hold" id="hold" aria-labelledby="holdTitle">
+    <div class="hold-head">
+      <span class="dot"></span>
+      <strong id="holdTitle">Safety gate is holding this experiment</strong>
+      <span class="id mono">EXP-7c41a9b2 &middot; proposed by Bayesian optimizer</span>
+    </div>
+
+    <div id="holdOpen">
+      <div class="hold-body">
+        <p class="hold-why">
+          Every value the optimizer proposed is inside its approved range.
+          The <strong>combination</strong> is not — this treatment is hot enough and long
+          enough to degrade the sample before it reaches characterization.
+        </p>
+        <p class="hold-rule mono">rule overtreatment_degradation_risk &nbsp;&rarr;&nbsp; cdcl2_treatment_temp_c &gt; 440 and cdcl2_treatment_time_min &gt; 40</p>
+
+        <div class="params">
+          <div class="p trig">
+            <div class="pn">CdCl₂ treatment temperature</div>
+            <div class="pv mono">452.0 <em>°C</em></div>
+            <div class="track"><b style="left:78.6%; right:0"></b><i style="left:87.1%"></i></div>
+            <div class="bounds mono"><span>330</span><span>guard 440</span><span>470</span></div>
+          </div>
+          <div class="p trig">
+            <div class="pn">CdCl₂ treatment time</div>
+            <div class="pv mono">47.0 <em>min</em></div>
+            <div class="track"><b style="left:63.6%; right:0"></b><i style="left:76.4%"></i></div>
+            <div class="bounds mono"><span>5</span><span>guard 40</span><span>60</span></div>
+          </div>
+          <div class="p">
+            <div class="pn">Absorber thickness</div>
+            <div class="pv mono">1973.7 <em>nm</em></div>
+            <div class="track"><i style="left:36.7%"></i></div>
+            <div class="bounds mono"><span>800</span><span>4000</span></div>
+          </div>
+          <div class="p">
+            <div class="pn">Substrate temperature</div>
+            <div class="pv mono">456.6 <em>°C</em></div>
+            <div class="track"><i style="left:68.9%"></i></div>
+            <div class="bounds mono"><span>250</span><span>550</span></div>
+          </div>
+          <div class="p">
+            <div class="pn">Dopant</div>
+            <div class="pv mono">0.70 <em>%</em></div>
+            <div class="track"><i style="left:23.3%"></i></div>
+            <div class="bounds mono"><span>0.0</span><span>3.0</span></div>
+          </div>
+        </div>
+
+        <div class="acts">
+          <button class="btn btn-primary" id="btnReturn" type="button">
+            Return to optimizer
+          </button>
+          <button class="btn btn-ghost" id="btnOverride" type="button">
+            Override and run anyway
+          </button>
+        </div>
+        <p class="note">
+          Returning marks the point infeasible, so the optimizer stops proposing into this
+          region. An override is recorded against your name in the decision log.
+        </p>
+      </div>
+    </div>
+
+    <div class="resolved" id="holdDone" hidden>
+      <span class="tick" aria-hidden="true">&check;</span>
+      <div>
+        <div class="rt" id="doneTitle">Returned to optimizer</div>
+        <div class="rs" id="doneSub">Decision logged &middot; no sample consumed &middot; region marked infeasible</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ evidence from the last completed run ============ -->
+  <div class="cols">
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Last completed run</h2>
+        <span class="chip chip-pass">Passed</span>
+        <span class="meta mono">EXP-2f90ad14</span>
+      </div>
+      <div class="card-body">
+
+        <div class="spec">
+          <span class="sl">Absorber thickness — requested vs achieved</span>
+          <span class="sv mono">2027.4 nm</span>
+        </div>
+        <div class="devbar">
+          <div class="band" style="left:25%; right:25%"></div>
+          <div class="mid" style="left:50%"></div>
+          <div class="act" style="left:63.6%"></div>
+        </div>
+        <div class="devscale mono">
+          <span>−5%</span><span>target 1973.7 nm</span><span>+5%</span>
+        </div>
+
+        <div class="spec"><span class="sl" style="font-weight:600;color:var(--ink)">Measured this run</span></div>
+        <div class="m">
+          <div class="mh"><span class="mn">Defect passivation</span><span class="mv mono">1.000</span></div>
+          <div class="mbar"><span style="width:100%"></span></div>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="mn">Phase purity</span><span class="mv mono">0.991</span></div>
+          <div class="mbar"><span style="width:99.1%"></span></div>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="mn">Crystallinity</span><span class="mv mono">0.983</span></div>
+          <div class="mbar"><span style="width:98.3%"></span></div>
+        </div>
+        <div class="m">
+          <div class="mh"><span class="mn">PCE proxy</span><span class="mv mono">0.784</span></div>
+          <div class="mbar"><span style="width:78.4%"></span></div>
+        </div>
+
+        <hr class="sep">
+
+        <div class="spec">
+          <span class="sl" style="font-weight:600;color:var(--ink)">How the objective was composed</span>
+          <span class="sv mono">0.898</span>
+        </div>
+        <div class="stack" role="img"
+             aria-label="Objective 0.898 composed of PCE proxy 0.353, defect passivation 0.200, crystallinity 0.197 and phase purity 0.149, out of a possible 1.0">
+          <span style="width:35.29%; background:var(--accent)"></span>
+          <span style="width:20.00%; background:#4a86ad"></span>
+          <span style="width:19.65%; background:#7aa9c7"></span>
+          <span style="width:14.87%; background:#aac9dd"></span>
+          <span style="width:10.19%; background:var(--line-2)"></span>
+        </div>
+        <div class="legend">
+          <div><i style="background:var(--accent)"></i>PCE proxy <b class="mono">0.353</b></div>
+          <div><i style="background:#4a86ad"></i>Passivation <b class="mono">0.200</b></div>
+          <div><i style="background:#7aa9c7"></i>Crystallinity <b class="mono">0.197</b></div>
+          <div><i style="background:#aac9dd"></i>Phase purity <b class="mono">0.149</b></div>
+          <div><i style="background:var(--line-2)"></i>Unclaimed <b class="mono">0.102</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Characterization</h2>
+        <span class="meta mono">data quality 1.00 &middot; eligible for model feedback</span>
+      </div>
+      <div class="card-body">
+
+        <figure class="chart" style="margin:0 0 18px">
+          <svg viewBox="0 0 320 150" role="img" aria-label="XRD pattern with a single peak near 25 degrees two-theta reaching intensity 0.549">
+            <line x1="44" y1="120" x2="304" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="44" y1="20" x2="44" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="44" y1="70" x2="304" y2="70" stroke="var(--line-2)" stroke-width="1"/>
+            <line x1="44" y1="20" x2="304" y2="20" stroke="var(--line-2)" stroke-width="1"/>
+            <text class="ax" x="39" y="123" text-anchor="end">0</text>
+            <text class="ax" x="39" y="73" text-anchor="end">0.30</text>
+            <text class="ax" x="39" y="23" text-anchor="end">0.60</text>
+            <polyline fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"
+              points="44,119.9 81.1,28.5 118.3,120 155.4,120 192.6,120 229.7,120 266.9,120 304,120"/>
+            <circle cx="44" cy="119.9" r="2.5" fill="var(--accent)"/>
+            <circle cx="81.1" cy="28.5" r="3.4" fill="var(--accent)"/>
+            <circle cx="118.3" cy="120" r="2.5" fill="var(--accent)"/>
+            <circle cx="155.4" cy="120" r="2.5" fill="var(--accent)"/>
+            <circle cx="192.6" cy="120" r="2.5" fill="var(--accent)"/>
+            <circle cx="229.7" cy="120" r="2.5" fill="var(--accent)"/>
+            <circle cx="266.9" cy="120" r="2.5" fill="var(--accent)"/>
+            <circle cx="304" cy="120" r="2.5" fill="var(--accent)"/>
+            <text class="ax" x="81.1" y="24" text-anchor="middle" fill="var(--ink-2)">0.549</text>
+            <text class="ax" x="44" y="132" text-anchor="middle">20</text>
+            <text class="ax" x="117.1" y="132" text-anchor="middle">30</text>
+            <text class="ax" x="190.2" y="132" text-anchor="middle">40</text>
+            <text class="ax" x="263.4" y="132" text-anchor="middle">50</text>
+            <text class="axl" x="174" y="146" text-anchor="middle">2θ (degrees)</text>
+          </svg>
+          <figcaption>XRD pattern &middot; stored artifact, 8-point downsample</figcaption>
+        </figure>
+
+        <figure class="chart" style="margin:0">
+          <svg viewBox="0 0 320 150" role="img" aria-label="J-V curve holding near 0.99 then falling sharply past the open-circuit voltage of 0.815 volts">
+            <line x1="44" y1="120" x2="304" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="44" y1="20" x2="44" y2="120" stroke="var(--line)" stroke-width="1"/>
+            <line x1="44" y1="70" x2="304" y2="70" stroke="var(--line-2)" stroke-width="1"/>
+            <line x1="44" y1="20" x2="304" y2="20" stroke="var(--line-2)" stroke-width="1"/>
+            <text class="ax" x="39" y="123" text-anchor="end">0</text>
+            <text class="ax" x="39" y="73" text-anchor="end">0.50</text>
+            <text class="ax" x="39" y="23" text-anchor="end">1.00</text>
+            <polygon fill="var(--accent-soft)"
+              points="44,20.9 77.5,20.9 111,20.9 144.5,20.9 178.3,21 211.8,21.8 245.4,30.3 278.9,116.5 278.9,120 44,120"/>
+            <polyline fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"
+              points="44,20.9 77.5,20.9 111,20.9 144.5,20.9 178.3,21 211.8,21.8 245.4,30.3 278.9,116.5"/>
+            <line x1="279.4" y1="20" x2="279.4" y2="120" stroke="var(--ink-2)" stroke-width="1" stroke-dasharray="3 3"/>
+            <text class="ax" x="275" y="34" text-anchor="end" fill="var(--ink-2)">Voc 0.815</text>
+            <text class="ax" x="44" y="132" text-anchor="middle">0</text>
+            <text class="ax" x="130.7" y="132" text-anchor="middle">0.30</text>
+            <text class="ax" x="217.3" y="132" text-anchor="middle">0.60</text>
+            <text class="ax" x="304" y="132" text-anchor="middle">0.90</text>
+            <text class="axl" x="174" y="146" text-anchor="middle">Voltage (V)</text>
+          </svg>
+          <figcaption>J–V curve &middot; Jsc 0.991 &middot; fill factor 0.845</figcaption>
+        </figure>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ decision log ============ -->
+  <section class="log">
+    <div class="card-head" style="padding-inline:0; border:0">
+      <h2 style="font-size:13px; margin:0">Decision log</h2>
+      <span class="meta mono">every gate verdict and policy choice, recorded</span>
+    </div>
+    <ul>
+      <li>
+        <span class="t mono">18:42</span>
+        <span class="chip chip-flag">Flag</span>
+        <span class="d">EXP-4b17 ran at 434 °C with <em>approaching_overtreatment_cliff</em> raised</span>
+        <span class="s mono" style="color:var(--flag)">scored 0.183</span>
+      </li>
+      <li>
+        <span class="t mono">18:29</span>
+        <span class="chip chip-pass">Pass</span>
+        <span class="d">EXP-2f90 completed, all six steps, both artifacts written</span>
+        <span class="s mono" style="color:var(--pass)">scored 0.898</span>
+      </li>
+      <li>
+        <span class="t mono">18:11</span>
+        <span class="chip chip-pass">Policy</span>
+        <span class="d">Scoring policy set to <em>Balanced device quality</em> by D. Sun</span>
+        <span class="s mono">v1</span>
+      </li>
+    </ul>
+    <p class="note">
+      The flagged run at 18:42 scored 0.183 — the warning was not noise. That is the
+      evidence used to decide whether a flag should become a block.
+    </p>
+  </section>
+
+  <footer>
+    Design prototype for the <strong>AI-to-Lab Orchestrator</strong>, a self-driving-lab
+    orchestration project. Every value shown is taken from a real run of the CdTe surrogate
+    benchmark in that repository — the parameters, the triggered hazard rule, the measurements,
+    the objective breakdown and both artifacts are genuine system output, not illustration.
+    The CdTe module is a literature-inspired noisy surrogate benchmark environment and makes no
+    claim about real device performance. This screen is a design prototype: it is not connected
+    to laboratory equipment.
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var open = document.getElementById('holdOpen');
+    var done = document.getElementById('holdDone');
+    var title = document.getElementById('doneTitle');
+    var sub = document.getElementById('doneSub');
+
+    function resolve(kind) {
+      var now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (kind === 'return') {
+        title.textContent = 'Returned to optimizer';
+        sub.textContent = 'Logged ' + now + ' · no sample consumed · region marked infeasible';
+      } else {
+        title.textContent = 'Override recorded';
+        sub.textContent = 'Logged ' + now + ' · queued for execution · attributed to the signed-in operator';
+      }
+      open.hidden = true;
+      done.hidden = false;
+      done.focus();
+    }
+
+    document.getElementById('btnReturn').addEventListener('click', function () { resolve('return'); });
+    document.getElementById('btnOverride').addEventListener('click', function () { resolve('override'); });
+  })();
+</script>
