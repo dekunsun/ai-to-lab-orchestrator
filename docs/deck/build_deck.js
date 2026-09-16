@@ -752,7 +752,7 @@ function lightSlide() {
   s.addText("What this prototype adds is the domain-technical layer: I understand the closed loop, the data, and the governance well enough to run programmes in it.",
     { x: L, y: 5.65, w: 11.5, h: 0.6, isTextBox: true, margin: 0,
       fontFace: B, fontSize: 14, color: "C3D0DA", valign: "middle", lineSpacing: 20 });
-  s.addText("github.com/…/ai-to-lab-orchestrator   ·   65 tests   ·   docs/architecture.md",
+  s.addText("github.com/dekunsun/ai-to-lab-orchestrator   ·   65 tests   ·   docs/architecture.md",
     { x: L, y: 6.45, w: 11.5, h: 0.35, isTextBox: true, margin: 0,
       fontFace: M, fontSize: 11, color: "7E8E9C" });
   s.addNotes("Close on intent, not on modesty. The seniority question is answered by saying plainly that I am optimizing for direction and team, not title.");

@@ -8,7 +8,7 @@ clean results back to close the loop.
 > This repo is a **systems / orchestration** portfolio, not a physics simulator.
 > See "Scientific modeling scope" below.
 
-[![tests](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+[![tests](https://github.com/dekunsun/ai-to-lab-orchestrator/actions/workflows/ci.yml/badge.svg)](https://github.com/dekunsun/ai-to-lab-orchestrator/actions/workflows/ci.yml)
 
 ---
 
