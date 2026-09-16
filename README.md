@@ -34,6 +34,22 @@ python3 -m venv .venv && ./.venv/bin/pip install -r requirements.txt
 Every experiment (parameters, per-step outputs, artifacts, failures, safety
 review, data-quality, model-feedback eligibility) is persisted to `db/lab.sqlite`.
 
+### Open the dashboard
+
+```bash
+./.venv/bin/streamlit run dashboard/app.py
+```
+
+Three views — **Command Center** (live state from the database: experiments,
+safety-gate verdicts, failure taxonomy, hypothesis registry), **CdTe Benchmark**
+(convergence with IQR bands, policy comparison), and **Hydride Triage** (live
+weight sliders, ranking sensitivity, per-candidate provenance).
+
+The dashboard renders state and recomputes cheap derivations. It never writes,
+never executes an experiment, and owns no workflow logic — `orchestrator/`,
+`policy/` and `triage/` all run headless without importing Streamlit, and a
+check in CI-able form asserts it.
+
 ### Reproduce the benchmark
 
 ```bash
@@ -264,6 +280,9 @@ validation planning on top of them.
       failure-aware metrics, reproducible from a script
 - [x] **Phase 2.5** — decision policies extracted from code into `configs/policies/`
 - [x] **Phase 3** — hydride triage from published paper data, wired into the loop
-- [ ] **Phase 4** — governance: data-quality view, failure taxonomy (hypothesis
-      registry landed with Phase 3)
-- [ ] **Phase 5** — dashboard, deck, demo video; optional LLM-to-YAML
+- [x] **Phase 4** — governance surfaced: safety verdicts, failure taxonomy and
+      hypothesis registry in the Command Center
+- [x] **Phase 5a** — Streamlit dashboard, three views
+- [ ] **Phase 5b** — deck, demo video, "Why Me" bridge
+- [ ] **Evidence loop** — a completed validation should mark its hypothesis
+      supported or contradicted and re-rank the cohort (see `docs/architecture.md` §8)
