@@ -671,30 +671,31 @@ function lightSlide() {
 {
   const s = darkSlide();
   chip(s, "13  ·  WHAT WENT WRONG", { fill: SIGNAL });
-  title(s, "Five defects I found in my own build", { color: WHITE });
-  kicker(s, "These are real, not hypotheticals, and they are documented in the repository. Four of the five were silent — the system looked correct while being wrong.",
+  title(s, "Six defects I found in my own build", { color: WHITE });
+  kicker(s, "These are real, not hypotheticals, and they are documented in the repository. Five of the six were silent \u2014 the system looked correct while being wrong.",
     { y: 1.68, color: "8A9AA8" });
 
   const defects = [
     ["The safety gate protected nothing", "Its hazard region was a strict subset of the true failure region, so every experiment it flagged was already doomed. It prevented zero damage while appearing to work in every demo.", "Governance fails identically to how it succeeds. It needs a test, not a demo."],
     ["The benchmark numbers were wrong", "The README claimed a BO median of 0.84. The measured value was 0.806, and no script in the repository produced either number.", "One script is now the sole source of every published figure."],
-    ["One RNG served lab and optimizer", "BO draws ~512 candidates per iteration, random search draws 5 — so the two methods faced different measurement noise. The per-seed comparison was meaningless.", "Separate streams, and common random numbers across methods."],
-    ["BO got trapped in failure regions", "Failed experiments yield no objective, so a naive surrogate never learns to avoid them and keeps re-proposing into the dead zone, burning budget.", "A feasibility penalty and an escape hatch — a real constrained-BO problem."],
-    ["Rounding moved the median by 0.006", "Rounding each weighted term to six decimals — a 1e-4 perturbation — changed which point the GP held as incumbent, changed the argmax of Expected Improvement, and redirected the whole search.", "Closed loops are chaotically sensitive to their own numerics. Round for display, never before a decision."],
+    ["One RNG served lab and optimizer", "BO draws ~512 candidates per iteration, random search draws 5 \u2014 so the two methods faced different measurement noise. The per-seed comparison was meaningless.", "Separate streams, and common random numbers across methods."],
+    ["BO got trapped in failure regions", "Failed experiments yield no objective, so a naive surrogate never learns to avoid them and keeps re-proposing into the dead zone, burning budget.", "A feasibility penalty and an escape hatch \u2014 a real constrained-BO problem."],
+    ["Rounding moved the median by 0.006", "Rounding each weighted term to six decimals \u2014 a 1e-4 perturbation \u2014 changed which point the GP held as incumbent, changed the argmax of Expected Improvement, and redirected the whole search.", "Closed loops are chaotically sensitive to their own numerics. Round for display, never before a decision."],
+    ["Fabricated data labelled as published", "An earlier version shipped a 25-row hydride dataset whose header said the values came straight from the paper. Three compounds in it appear nowhere in that paper. Invented numbers, presented as measurements.", "A fabricated row is indistinguishable from a transcribed one once they share a file. Provenance has to be a boundary, not a comment."],
   ];
-  let y = 2.42;
+  let y = 2.36;
   defects.forEach(([h2, what, taught], i) => {
     s.addText(String(i + 1).padStart(2, "0"), { x: L, y, w: 0.5, h: 0.3, isTextBox: true, margin: 0,
-      fontFace: M, fontSize: 12, bold: true, color: SIGNAL, valign: "middle" });
+      fontFace: M, fontSize: 11.5, bold: true, color: SIGNAL, valign: "middle" });
     s.addText(h2, { x: L + 0.55, y, w: 3.5, h: 0.3, isTextBox: true, margin: 0,
-      fontFace: H, fontSize: 13.5, bold: true, color: WHITE, valign: "middle" });
-    s.addText(what, { x: L + 4.15, y: y - 0.04, w: 3.8, h: 0.9, isTextBox: true, margin: 0,
-      fontFace: B, fontSize: 9.5, color: "9CACBA", valign: "top", lineSpacing: 12.5 });
-    s.addText(taught, { x: 8.9, y: y - 0.04, w: 3.8, h: 0.9, isTextBox: true, margin: 0,
-      fontFace: B, fontSize: 9.5, color: "6FA8CE", valign: "top", lineSpacing: 12.5, italic: true });
-    y += 0.95;
+      fontFace: H, fontSize: 12.5, bold: true, color: WHITE, valign: "middle" });
+    s.addText(what, { x: L + 4.15, y: y - 0.04, w: 3.8, h: 0.78, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 9, color: "9CACBA", valign: "top", lineSpacing: 12 });
+    s.addText(taught, { x: 8.9, y: y - 0.04, w: 3.8, h: 0.78, isTextBox: true, margin: 0,
+      fontFace: B, fontSize: 9, color: "6FA8CE", valign: "top", lineSpacing: 12, italic: true });
+    y += 0.81;
   });
-  s.addNotes("This is the slide that separates me from a candidate who only shows what worked. The pattern across all five is the same: the failure mode that matters is the silent one, where the system looks right and is not.");
+  s.addNotes("This is the slide that separates me from a candidate who only shows what worked. The pattern across all six is the same: the failure mode that matters is the silent one, where the system looks right and is not. If time is short, tell 01 and 06 and let the slide carry the rest \u2014 06 is the one that connects back to the honesty principle the whole project rests on.");
 }
 
 // ================================================================ 14. NOT BUILT

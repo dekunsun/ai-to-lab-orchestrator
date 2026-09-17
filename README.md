@@ -37,8 +37,8 @@ published candidates → policy ranking → validation plan → the same safety 
 
 The parts worth reading first: [what the triage surfaced that a Tc-ordered list
 cannot](#what-the-triage-actually-surfaces), [how to read the benchmark
-honestly](#benchmark-results), and the five real defects in
-[docs/architecture.md §5](docs/architecture.md) — four of which were silent, in
+honestly](#benchmark-results), and the six real defects in
+[docs/architecture.md §5](docs/architecture.md) — five of which were silent, in
 the sense that the system looked correct while being wrong.
 
 **Portfolio materials:** [deck](docs/deck/ai_to_lab_orchestrator.pdf) ·

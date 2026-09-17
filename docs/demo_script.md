@@ -18,7 +18,7 @@ these three are the ones worth landing:
    Surrogate for the systems question, published data for the physics question.
 2. **I built governance that can actually refuse, and I can price what it costs.**
    `blocked` is not `failed`; the benchmark reports both.
-3. **I found five defects in my own build, four of them silent.**
+3. **I found six defects in my own build, five of them silent.**
    That is the judgment signal. Anyone can show what worked.
 
 > 中文：这三条是整场的锚。每一张幻灯片都在为其中一条服务。讲之前先在心里确认——
@@ -67,7 +67,7 @@ these three are the ones worth landing:
 > defects I found in my own build.
 
 > 中文：结尾那句**把选择权交给对方**，比你自己决定讲哪部分好。
-> 很多面试官会直接选"the five defects"——那正是你最想讲的那张。
+> 很多面试官会直接选"the six defects"——那正是你最想讲的那张。
 
 ---
 
@@ -381,12 +381,12 @@ interruptions; a walkthrough that gets interrupted is going well.
 
 ---
 
-### 14 · Five defects I found in my own build — 90s ★
+### 14 · Six defects I found in my own build — 90s ★
 
 > I'd rather spend time here than on anything that worked.
 >
-> These are five real defects, documented in the repo. I won't go through all of
-> them — but the pattern is the point: **four of the five were silent.** The system
+> These are six real defects, documented in the repo. I won't go through all of
+> them — but the pattern is the point: **five of the six were silent.** The system
 > looked correct while being wrong.
 >
 > The clearest one is the first. My safety gate protected nothing. Its hazard
@@ -397,15 +397,33 @@ interruptions; a walkthrough that gets interrupted is going well.
 > just widening the rule, it was adding a test that samples twenty thousand random
 > points and asserts nothing degrading can reach a device.
 >
-> And the last one is my favourite. I rounded each weighted term to six decimal
-> places — a change of one part in ten thousand. It moved the benchmark median by
-> 0.006, because it changed which point the surrogate held as incumbent, which
-> changed the argmax of Expected Improvement, and sent the whole search down a
-> different path. The general lesson is that closed-loop systems are chaotically
-> sensitive to their own numerics. Round for display, never before a decision.
+> The fifth is my favourite technically. I rounded each weighted term to six
+> decimal places — a change of one part in ten thousand. It moved the benchmark
+> median by 0.006, because it changed which point the surrogate held as incumbent,
+> which changed the argmax of Expected Improvement, and sent the whole search down
+> a different path. Closed-loop systems are chaotically sensitive to their own
+> numerics. Round for display, never before a decision.
+>
+> But the sixth is the one that matters most, and it's the most recent. An earlier
+> version of this project shipped a hydride dataset of twenty-five rows, with a
+> header saying the values came straight from the published paper. Three of those
+> compounds appear nowhere in that paper — not in the tables, not in the body. The
+> numbers were invented and labelled as measurements.
+>
+> I found it because the row counts didn't match, and I only trusted that because
+> I stopped asking a summarising tool to count and parsed the paper's tables
+> myself. Two passes of the same tool over the same page had given me three
+> different answers.
+>
+> That one is why the provenance boundary in this project is a file boundary and
+> not a comment. Once a fabricated row shares a file with a transcribed one,
+> nothing downstream can tell them apart — and a header asserting provenance is
+> exactly the claim nobody re-checks.
 
 > 中文：**这是你和其他候选人的最大差距。**
-> 讲法：不要五个都讲，讲第 1 个和第 5 个，中间三个让幻灯片自己说。
+> 讲法：不要六个都讲，讲第 1 个和第 6 个，中间四个让幻灯片自己说。
+> 第 6 个要留到最后，因为它直接连回第 4 张的「科学诚实」原则——**整个项目的论点
+> 在这里闭合**：不是「我相信要诚实」，而是「我抓到过自己不诚实，然后建了防线」。
 > "I'd rather spend time here than on anything that worked" 这句开场很重要——
 > 它把"承认错误"重构成"这才是值得看的部分"。
 > 如果对方追问某一个，说明你成功了。
@@ -456,7 +474,7 @@ interruptions; a walkthrough that gets interrupted is going well.
 Cut to: **4 → 5 → 7 → 10 → 14 → 16.**
 
 Honesty principle, the loop and what it refuses, the three caveats, the
-technetium finding, the five defects, the close. That sequence still lands all
+technetium finding, the six defects, the close. That sequence still lands all
 three of the things worth remembering.
 
 > 中文：练熟这个 5 分钟版。它比 13 分钟版更常用——很多面试只给你 5 分钟展示，
